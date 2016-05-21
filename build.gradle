@@ -15,6 +15,14 @@ repositories {
 
 dependencies {
     compile 'io.dropwizard:dropwizard-core:0.9.2'
+    compile 'io.dropwizard:dropwizard-jdbi:0.9.2'
+
+    compile 'org.jdbi:jdbi:2.73'
+    compile 'com.h2database:h2:1.4.191'
+
+    compile 'mysql:mysql-connector-java:5.1.37'
+    //compile 'io.dropwizard.modules:dropwizard-flyway:0.9.2-1'
+
 
     testCompile 'junit:junit:4.11'
 }

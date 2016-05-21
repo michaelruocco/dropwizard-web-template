@@ -1,7 +1,12 @@
 package uk.co.mruoc.hello;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.db.DataSourceFactory;
+//import io.dropwizard.flyway.FlywayFactory;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 public class Configuration extends io.dropwizard.Configuration {
 
@@ -10,6 +15,16 @@ public class Configuration extends io.dropwizard.Configuration {
 
     @NotEmpty
     private String defaultName = "Stranger";
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private DataSourceFactory database = new DataSourceFactory();
+
+    //@Valid
+    //@NotNull
+    //@JsonProperty
+    //private FlywayFactory flyway = new FlywayFactory();
 
     @JsonProperty
     public String getTemplate() {
@@ -30,5 +45,13 @@ public class Configuration extends io.dropwizard.Configuration {
     public void setDefaultName(String name) {
         this.defaultName = name;
     }
+
+    public DataSourceFactory getDataSourceFactory() {
+        return database;
+    }
+
+    /*public FlywayFactory getFlywayFactory() {
+        return flyway;
+    }*/
 
 }

@@ -1,8 +1,12 @@
 package uk.co.mruoc.hello;
 
+import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.skife.jdbi.v2.DBI;
 import uk.co.mruoc.hello.health.TemplateHealthCheck;
+import uk.co.mruoc.hello.jdbi.SayingDao;
 import uk.co.mruoc.hello.resources.HelloResource;
 
 public class Application extends io.dropwizard.Application<Configuration> {
@@ -18,19 +22,19 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
     @Override
     public void initialize(Bootstrap<Configuration> bootstrap) {
-        // nothing to do yet
+        bootstrap.addBundle(new DBIExceptionsBundle());
     }
 
     @Override
     public void run(Configuration configuration, Environment environment) {
-        final HelloResource resource = new HelloResource(
-                configuration.getTemplate(),
-                configuration.getDefaultName()
-        );
+        final DBIFactory factory = new DBIFactory();
+        final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
+        final SayingDao dao = jdbi.onDemand(SayingDao.class);
+        dao.createSayingTable();
+        final HelloResource resource = new HelloResource(dao);
         environment.jersey().register(resource);
 
-        final TemplateHealthCheck healthCheck =
-                new TemplateHealthCheck(configuration.getTemplate());
+        final TemplateHealthCheck healthCheck = new TemplateHealthCheck(configuration.getTemplate());
         environment.healthChecks().register("template", healthCheck);
     }
 
