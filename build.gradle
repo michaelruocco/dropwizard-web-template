@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+project.ext {
+    artifactId = "dropwizard-hello-world"
+    group = 'com.github.michaelruocco'
+    version = '1.0.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:0.9.2'
+
+    testCompile 'junit:junit:4.11'
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Version': project.ext.version
+        attributes 'Main-Class': 'uk.co.mruoc.hello.Application'
+    }
+    baseName = project.ext.artifactId + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
