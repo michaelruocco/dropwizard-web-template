@@ -2,7 +2,10 @@ template: Hello, %s!
 defaultName: Stranger
 
 database:
-  driverClass: org.h2.Driver
-  user: sa
+  driverClass: com.mysql.jdbc.Driver
+  user: root
   password:
-  url: jdbc:h2:./h2/web_template;MODE=MySQL
+  url: jdbc:mysql://localhost:3307/web_template
+
+swagger:
+  resourcePackage: uk.co.mruoc.resources

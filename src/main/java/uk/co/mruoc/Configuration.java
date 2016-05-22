@@ -2,6 +2,7 @@ package uk.co.mruoc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.db.DataSourceFactory;
+import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
@@ -14,6 +15,8 @@ public class Configuration extends io.dropwizard.Configuration {
 
     @NotEmpty
     private String defaultName = "Stranger";
+
+    private SwaggerBundleConfiguration swaggerBundleConfiguration;
 
     @Valid
     @NotNull
@@ -38,6 +41,15 @@ public class Configuration extends io.dropwizard.Configuration {
     @JsonProperty
     public void setDefaultName(String name) {
         this.defaultName = name;
+    }
+
+    @JsonProperty("swagger")
+    public void setSwaggerBundleConfiguration(SwaggerBundleConfiguration swaggerBundleConfiguration) {
+        this.swaggerBundleConfiguration = swaggerBundleConfiguration;
+    }
+
+    public SwaggerBundleConfiguration getSwaggerBundleConfiguration() {
+        return swaggerBundleConfiguration;
     }
 
     public DataSourceFactory getDataSourceFactory() {

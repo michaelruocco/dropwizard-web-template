@@ -36,21 +36,20 @@ dependencies {
 
     compile 'org.jdbi:jdbi:2.73'
     compile 'com.h2database:h2:1.4.191'
-
-
     compile 'mysql:mysql-connector-java:5.1.37'
     compile 'org.flywaydb:flyway-core:4.0.1'
+    compile 'io.federecio:dropwizard-swagger:0.7.0'
 
     testCompile 'junit:junit:4.11'
 }
 
-/*embeddedMysql {
+embeddedMysql {
     def yamlConfig = new Yaml().load(new File('config/web-template.yml').newReader())
     def dbConfig = yamlConfig.database
 
     url = dbConfig.url
     version = 'v5_6_22'
-}*/
+}
 
 flyway {
     def yamlConfig = new Yaml().load(new File('config/web-template.yml').newReader())
@@ -62,9 +61,9 @@ flyway {
 }
 
 run {
-    dependsOn /*startEmbeddedMysql,*/ flywayMigrate, flywayInfo
-    //flywayMigrate.mustRunAfter startEmbeddedMysql
+    dependsOn startEmbeddedMysql, flywayMigrate, flywayInfo
+    flywayMigrate.mustRunAfter startEmbeddedMysql
     flywayInfo.mustRunAfter flywayMigrate
-    mainClassName = "uk.co.mruoc.Application"
+    mainClassName = "uk.co.mruoc.Main"
     args 'server', 'config/web-template.yml'
 }
