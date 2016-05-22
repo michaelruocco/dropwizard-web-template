@@ -1,4 +1,4 @@
-package uk.co.mruoc.hello.api;
+package uk.co.mruoc.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;

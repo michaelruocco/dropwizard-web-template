@@ -1,4 +1,4 @@
-package uk.co.mruoc.hello.health;
+package uk.co.mruoc.health;
 
 import com.codahale.metrics.health.HealthCheck;
 

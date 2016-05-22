@@ -1,8 +1,8 @@
-package uk.co.mruoc.hello.resources;
+package uk.co.mruoc.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import uk.co.mruoc.hello.api.Saying;
-import uk.co.mruoc.hello.jdbi.SayingDao;
+import uk.co.mruoc.api.Saying;
+import uk.co.mruoc.jdbi.SayingDao;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

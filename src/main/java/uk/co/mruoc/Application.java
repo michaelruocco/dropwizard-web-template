@@ -1,14 +1,12 @@
-package uk.co.mruoc.hello;
+package uk.co.mruoc;
 
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.flywaydb.core.Flyway;
 import org.skife.jdbi.v2.DBI;
-import uk.co.mruoc.hello.health.TemplateHealthCheck;
-import uk.co.mruoc.hello.jdbi.SayingDao;
-import uk.co.mruoc.hello.resources.HelloResource;
+import uk.co.mruoc.jdbi.SayingDao;
+import uk.co.mruoc.resources.HelloResource;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 

@@ -1,11 +1,11 @@
-package uk.co.mruoc.hello.jdbi;
+package uk.co.mruoc.jdbi;
 
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
-import uk.co.mruoc.hello.api.Saying;
+import uk.co.mruoc.api.Saying;
 
 @RegisterMapper(SayingMapper.class)
 public interface SayingDao {

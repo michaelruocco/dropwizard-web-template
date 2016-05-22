@@ -1,8 +1,8 @@
-package uk.co.mruoc.hello.jdbi;
+package uk.co.mruoc.jdbi;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
-import uk.co.mruoc.hello.api.Saying;
+import uk.co.mruoc.api.Saying;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -45,7 +45,7 @@ dependencies {
 }
 
 /*embeddedMysql {
-    def yamlConfig = new Yaml().load(new File('config/hello-world.yml').newReader())
+    def yamlConfig = new Yaml().load(new File('config/web-template.yml').newReader())
     def dbConfig = yamlConfig.database
 
     url = dbConfig.url
@@ -53,7 +53,7 @@ dependencies {
 }*/
 
 flyway {
-    def yamlConfig = new Yaml().load(new File('config/hello-world.yml').newReader())
+    def yamlConfig = new Yaml().load(new File('config/web-template.yml').newReader())
     def dbConfig = yamlConfig.database
 
     user = dbConfig.user
@@ -65,6 +65,6 @@ run {
     dependsOn /*startEmbeddedMysql,*/ flywayMigrate, flywayInfo
     //flywayMigrate.mustRunAfter startEmbeddedMysql
     flywayInfo.mustRunAfter flywayMigrate
-    mainClassName = "uk.co.mruoc.hello.Application"
-    args 'server', 'config/hello-world.yml'
+    mainClassName = "uk.co.mruoc.Application"
+    args 'server', 'config/web-template.yml'
 }

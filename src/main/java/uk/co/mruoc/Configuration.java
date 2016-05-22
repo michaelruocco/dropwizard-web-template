@@ -1,4 +1,4 @@
-package uk.co.mruoc.hello;
+package uk.co.mruoc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.db.DataSourceFactory;
