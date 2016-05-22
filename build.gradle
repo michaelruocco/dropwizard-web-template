@@ -1,4 +1,21 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.flywaydb:flyway-gradle-plugin:4.0'
+        classpath 'org.yaml:snakeyaml:1.14'
+        classpath 'com.github.michaelruocco:embedded-mysql-plugin:2.0.0'
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'org.flywaydb.flyway'
+apply plugin: 'application'
+apply plugin: 'embedded-mysql'
 
 project.ext {
     artifactId = "dropwizard-hello-world"
@@ -20,19 +37,34 @@ dependencies {
     compile 'org.jdbi:jdbi:2.73'
     compile 'com.h2database:h2:1.4.191'
 
-    compile 'mysql:mysql-connector-java:5.1.37'
-    //compile 'io.dropwizard.modules:dropwizard-flyway:0.9.2-1'
 
+    compile 'mysql:mysql-connector-java:5.1.37'
+    compile 'org.flywaydb:flyway-core:4.0.1'
 
     testCompile 'junit:junit:4.11'
 }
 
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Version': project.ext.version
-        attributes 'Main-Class': 'uk.co.mruoc.hello.Application'
-    }
-    baseName = project.ext.artifactId + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+/*embeddedMysql {
+    def yamlConfig = new Yaml().load(new File('config/hello-world.yml').newReader())
+    def dbConfig = yamlConfig.database
+
+    url = dbConfig.url
+    version = 'v5_6_22'
+}*/
+
+flyway {
+    def yamlConfig = new Yaml().load(new File('config/hello-world.yml').newReader())
+    def dbConfig = yamlConfig.database
+
+    user = dbConfig.user
+    password = dbConfig.password
+    url = dbConfig.url
+}
+
+run {
+    dependsOn /*startEmbeddedMysql,*/ flywayMigrate, flywayInfo
+    //flywayMigrate.mustRunAfter startEmbeddedMysql
+    flywayInfo.mustRunAfter flywayMigrate
+    mainClassName = "uk.co.mruoc.hello.Application"
+    args 'server', 'config/hello-world.yml'
 }

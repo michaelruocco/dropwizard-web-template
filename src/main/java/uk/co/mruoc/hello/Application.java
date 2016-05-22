@@ -4,6 +4,7 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.flywaydb.core.Flyway;
 import org.skife.jdbi.v2.DBI;
 import uk.co.mruoc.hello.health.TemplateHealthCheck;
 import uk.co.mruoc.hello.jdbi.SayingDao;
@@ -17,7 +18,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
     @Override
     public String getName() {
-        return "hello-world";
+        return "web-template";
     }
 
     @Override
@@ -28,14 +29,13 @@ public class Application extends io.dropwizard.Application<Configuration> {
     @Override
     public void run(Configuration configuration, Environment environment) {
         final DBIFactory factory = new DBIFactory();
-        final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "mysql");
+        final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "database");
         final SayingDao dao = jdbi.onDemand(SayingDao.class);
-        dao.createSayingTable();
         final HelloResource resource = new HelloResource(dao);
         environment.jersey().register(resource);
 
-        final TemplateHealthCheck healthCheck = new TemplateHealthCheck(configuration.getTemplate());
-        environment.healthChecks().register("template", healthCheck);
+        //final TemplateHealthCheck healthCheck = new TemplateHealthCheck(configuration.getTemplate());
+        //environment.healthChecks().register("template", healthCheck);
     }
 
 }

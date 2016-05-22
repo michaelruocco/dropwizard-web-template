@@ -7,7 +7,7 @@ import uk.co.mruoc.hello.jdbi.SayingDao;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-@Path("/hello-world")
+@Path("/web-template")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class HelloResource {

@@ -10,9 +10,6 @@ import uk.co.mruoc.hello.api.Saying;
 @RegisterMapper(SayingMapper.class)
 public interface SayingDao {
 
-    @SqlUpdate("create table saying (id bigint primary key, content varchar(100))")
-    void createSayingTable();
-
     @SqlUpdate("insert into saying (id, content) values (:id, :content)")
     void insert(@BindBean Saying saying);
 

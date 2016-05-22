@@ -5,4 +5,4 @@ database:
   driverClass: org.h2.Driver
   user: sa
   password:
-  url: jdbc:h2:mem:test
+  url: jdbc:h2:./h2/web_template;MODE=MySQL
