@@ -88,25 +88,33 @@ task setupMysql {
 
 run {
     dependsOn setupMysql
-    mainClassName = 'uk.co.mruoc.Main'
+    mainClassName = mainClassName
     args 'server', configPath
 }
 
-task fatJar(type: Jar) {
+def getMainClassName() {
+    'uk.co.mruoc.Main'
+}
+
+def getArtifactName() {
+    project.ext.artifactId + '-all'
+}
+
+task allJar(type: Jar) {
     dependsOn assemble
     manifest {
         attributes 'Implementation-Version': project.ext.version
-        attributes 'Main-Class': 'uk.co.mruoc.Main'
+        attributes 'Main-Class': mainClassName
     }
-    baseName = project.ext.artifactId + '-all'
+    baseName = artifactName
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
 
 task startServer(type: SpawnProcessTask) {
-    dependsOn fatJar, setupMysql
-    setupMysql.mustRunAfter fatJar
-    command 'java -jar build/libs/dropwizard-web-template-all.jar server config/aat-web-template.yml'
+    dependsOn allJar, setupMysql
+    setupMysql.mustRunAfter allJar
+    command 'java -jar build/libs/' + artifactName + '.jar server ' + configPath
     ready 'org.eclipse.jetty.server.Server: Started'
 }
 
