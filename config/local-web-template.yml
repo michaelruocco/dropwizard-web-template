@@ -7,10 +7,10 @@ server:
     port: 8090
 
 database:
-  driverClass: com.mysql.jdbc.Driver
-  user: root
+  driverClass: org.h2.Driver
+  user: sa
   password:
-  url: jdbc:mysql://localhost:3307/web_template
+  url: jdbc:h2:./h2/web_template;MODE=MySQL
 
 swagger:
   resourcePackage: uk.co.mruoc.resources

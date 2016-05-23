@@ -10,7 +10,7 @@ import uk.co.mruoc.api.Customer;
 @RegisterMapper(CustomerMapper.class)
 public interface CustomerDao {
 
-    static final String FIELDS = "accountNumber, firstName, surname, balance";
+    String FIELDS = "accountNumber, firstName, surname, balance";
 
     @SqlUpdate("insert into customer (" + FIELDS + ") values (:accountNumber, :firstName, :surname, :balance)")
     void insert(@BindBean Customer customer);

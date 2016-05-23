@@ -14,8 +14,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
-@Path("ws/v1/customers")
-@Api(value = "ws/v1/customers", description = "Customer Maintenance")
+@Path("ws/v1/customers/")
+@Api(value = "ws/v1/customers/", description = "Customer Maintenance")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CustomerResource {
@@ -27,7 +27,7 @@ public class CustomerResource {
     }
 
     @GET
-    @Path("/{accountNumber}")
+    @Path("{accountNumber}")
     @ApiOperation(value = "Get single customer")
     @Timed
     public Response getCustomer(@PathParam("accountNumber") String accountNumber) {
@@ -41,7 +41,7 @@ public class CustomerResource {
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
         customerDao.insert(customer);
         Customer newCustomer = customerDao.getCustomer(customer.getAccountNumber());
-        URI uri = info.getBaseUriBuilder().path("ws/v1/customers" + newCustomer.getAccountNumber()).build();
+        URI uri = info.getBaseUriBuilder().path("ws/v1/customers/" + newCustomer.getAccountNumber()).build();
         return Response.created(uri).entity(newCustomer).build();
     }
 

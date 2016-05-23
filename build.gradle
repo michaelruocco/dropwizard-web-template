@@ -1,24 +1,32 @@
 import org.yaml.snakeyaml.Yaml
+import com.wiredforcode.gradle.spawn.SpawnProcessTask
+import com.wiredforcode.gradle.spawn.KillProcessTask
 
 buildscript {
     repositories {
         mavenCentral()
+        maven { url 'http://dl.bintray.com/vermeulen-mp/gradle-plugins' }
         jcenter()
     }
     dependencies {
         classpath 'org.flywaydb:flyway-gradle-plugin:4.0'
-        classpath 'org.yaml:snakeyaml:1.14'
+        classpath 'org.yaml:snakeyaml:1.17'
         classpath 'com.github.michaelruocco:embedded-mysql-plugin:2.0.0'
+        classpath 'com.github.samueltbrown:gradle-cucumber-plugin:0.9'
+        classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
     }
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'org.flywaydb.flyway'
 apply plugin: 'application'
 apply plugin: 'embedded-mysql'
+apply plugin: 'com.github.samueltbrown.cucumber'
+apply plugin: 'com.wiredforcode.spawn'
 
 project.ext {
-    artifactId = "dropwizard-hello-world"
+    artifactId = "dropwizard-web-template"
     group = 'com.github.michaelruocco'
     version = '1.0.0'
 }
@@ -41,6 +49,11 @@ dependencies {
     compile 'io.federecio:dropwizard-swagger:0.7.0'
 
     testCompile 'junit:junit:4.11'
+    testCompile 'org.assertj:assertj-core:3.3.0'
+    testCompile 'info.cukes:cucumber-java:1.2.4'
+    testCompile 'info.cukes:cucumber-junit:1.2.4'
+    testCompile 'org.apache.httpcomponents:httpclient:4.5.1'
+    testCompile 'com.google.code.gson:gson:2.5'
 }
 
 def getConfigPath() {
@@ -67,10 +80,34 @@ flyway {
     url = databaseConfig.url
 }
 
-run {
+task setupMysql {
     dependsOn startEmbeddedMysql, flywayMigrate, flywayInfo
     flywayMigrate.mustRunAfter startEmbeddedMysql
     flywayInfo.mustRunAfter flywayMigrate
-    mainClassName = "uk.co.mruoc.Main"
+}
+
+run {
+    dependsOn setupMysql
+    mainClassName = 'uk.co.mruoc.Main'
     args 'server', configPath
 }
+
+task fatJar(type: Jar) {
+    dependsOn assemble
+    manifest {
+        attributes 'Implementation-Version': project.ext.version
+        attributes 'Main-Class': 'uk.co.mruoc.Main'
+    }
+    baseName = project.ext.artifactId + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task startServer(type: SpawnProcessTask) {
+    dependsOn fatJar, setupMysql
+    setupMysql.mustRunAfter fatJar
+    command 'java -jar build/libs/dropwizard-web-template-all.jar server config/aat-web-template.yml'
+    ready 'org.eclipse.jetty.server.Server: Started'
+}
+
+task stopServer(type: KillProcessTask)

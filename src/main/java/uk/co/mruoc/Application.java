@@ -31,17 +31,17 @@ public class Application extends io.dropwizard.Application<Configuration> {
     }
 
     @Override
-    public void run(Configuration configuration, Environment environment) {
+    public void run(Configuration config, Environment env) {
         final DBIFactory factory = new DBIFactory();
-        final DBI jdbi = factory.build(environment, configuration.getDataSourceFactory(), "database");
+        final DBI jdbi = factory.build(env, config.getDataSourceFactory(), "database");
 
         final CustomerDao customerDao = jdbi.onDemand(CustomerDao.class);
         final CustomerResource customerResource = new CustomerResource(customerDao);
-        environment.jersey().register(customerResource);
+        env.jersey().register(customerResource);
 
         final Database database = new Database(jdbi);
         final CustomerTableHealthCheck customerTableHealthCheck = new CustomerTableHealthCheck(database);
-        environment.healthChecks().register("customerTable", customerTableHealthCheck);
+        env.healthChecks().register("customerTable", customerTableHealthCheck);
     }
 
 }
