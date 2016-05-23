@@ -43,21 +43,28 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-embeddedMysql {
-    def yamlConfig = new Yaml().load(new File('config/web-template.yml').newReader())
-    def dbConfig = yamlConfig.database
+def getConfigPath() {
+    'config/aat-web-template.yml'
+}
 
-    url = dbConfig.url
+def getDatabaseConfig() {
+    def yaml = new Yaml()
+    def config = new File(configPath)
+    def yamlConfig = yaml.load(config.newReader())
+    yamlConfig.database
+}
+
+embeddedMysql {
+    def databaseConfig = getDatabaseConfig()
+    url = databaseConfig.url
     version = 'v5_6_22'
 }
 
 flyway {
-    def yamlConfig = new Yaml().load(new File('config/web-template.yml').newReader())
-    def dbConfig = yamlConfig.database
-
-    user = dbConfig.user
-    password = dbConfig.password
-    url = dbConfig.url
+    def databaseConfig = getDatabaseConfig()
+    user = databaseConfig.user
+    password = databaseConfig.password
+    url = databaseConfig.url
 }
 
 run {
@@ -65,5 +72,5 @@ run {
     flywayMigrate.mustRunAfter startEmbeddedMysql
     flywayInfo.mustRunAfter flywayMigrate
     mainClassName = "uk.co.mruoc.Main"
-    args 'server', 'config/web-template.yml'
+    args 'server', configPath
 }
