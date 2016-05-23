@@ -1,5 +1,11 @@
-template: Hello, %s!
-defaultName: Stranger
+template: web-template
+
+server:
+  type: simple
+  applicationContextPath: /web-template
+  connector:
+    type: http
+    port: 8090
 
 database:
   driverClass: com.mysql.jdbc.Driver
