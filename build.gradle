@@ -41,19 +41,21 @@ repositories {
 dependencies {
     compile 'io.dropwizard:dropwizard-core:0.9.2'
     compile 'io.dropwizard:dropwizard-jdbi:0.9.2'
+    compile 'io.dropwizard:dropwizard-testing:0.9.2'
 
     compile 'org.jdbi:jdbi:2.73'
     compile 'com.h2database:h2:1.4.191'
     compile 'mysql:mysql-connector-java:5.1.37'
     compile 'org.flywaydb:flyway-core:4.0.1'
     compile 'io.federecio:dropwizard-swagger:0.7.0'
+    compile 'org.apache.httpcomponents:httpclient:4.5.1'
+    compile 'com.google.code.gson:gson:2.5'
 
     testCompile 'junit:junit:4.11'
     testCompile 'org.assertj:assertj-core:3.3.0'
     testCompile 'info.cukes:cucumber-java:1.2.4'
     testCompile 'info.cukes:cucumber-junit:1.2.4'
-    testCompile 'org.apache.httpcomponents:httpclient:4.5.1'
-    testCompile 'com.google.code.gson:gson:2.5'
+    testCompile 'org.yaml:snakeyaml:1.17'
 }
 
 def getConfigPath() {

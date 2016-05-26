@@ -1,4 +1,4 @@
-package uk.co.tpplc;
+package uk.co.mruoc.client;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import uk.co.mruoc.api.Customer;
 
 import java.io.*;
-import java.util.List;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class CustomerResponse {
@@ -27,6 +27,7 @@ public class CustomerResponse {
         this.headers = response.getAllHeaders();
         this.statusMessage = getStatusMessage(response);
         this.content = getContent(response);
+        logInfo("got headers " + Arrays.toString(headers));
         logInfo("got status code " + statusCode);
         logInfo("got content " + content);
         logInfo("status message " + statusMessage);

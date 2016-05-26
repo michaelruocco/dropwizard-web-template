@@ -4,6 +4,8 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.client.CustomerClient;
+import uk.co.mruoc.client.CustomerResponse;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomerMaintenance {
 
-    private final TestClient client = new TestClient();
+    private final CustomerClient client = new CustomerClient();
 
     private CustomerResponse customerResponse;
     private Customer newCustomer;

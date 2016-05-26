@@ -12,7 +12,7 @@ import uk.co.mruoc.health.Database;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.CustomerResource;
 
-public class Application extends io.dropwizard.Application<Configuration> {
+public class Application extends io.dropwizard.Application<Config> {
 
     @Override
     public String getName() {
@@ -20,18 +20,18 @@ public class Application extends io.dropwizard.Application<Configuration> {
     }
 
     @Override
-    public void initialize(Bootstrap<Configuration> bootstrap) {
+    public void initialize(Bootstrap<Config> bootstrap) {
         bootstrap.addBundle(new DBIExceptionsBundle());
-        bootstrap.addBundle(new SwaggerBundle<Configuration>() {
+        bootstrap.addBundle(new SwaggerBundle<Config>() {
             @Override
-            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(Configuration configuration) {
-                return configuration.getSwaggerBundleConfiguration();
+            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(Config config) {
+                return config.getSwaggerBundleConfiguration();
             }
         });
     }
 
     @Override
-    public void run(Configuration config, Environment env) {
+    public void run(Config config, Environment env) {
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(env, config.getDataSourceFactory(), "database");
 

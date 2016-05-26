@@ -1,5 +1,3 @@
-template: web-template
-
 server:
   applicationContextPath: /web-template
   applicationConnectors:

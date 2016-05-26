@@ -1,4 +1,4 @@
-package uk.co.tpplc;
+package uk.co.mruoc.client;
 
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
@@ -11,12 +11,11 @@ import uk.co.mruoc.api.Customer;
 
 import java.io.*;
 
-public class TestClient {
+public class CustomerClient {
 
-    private static final Logger LOG = Logger.getLogger(TestClient.class);
+    private static final Logger LOG = Logger.getLogger(CustomerClient.class);
 
     private static final String CUSTOMERS_URL = "http://localhost:8090/web-template/ws/v1/customers";
-    private static final String PAGED_CUSTOMERS_URL = CUSTOMERS_URL + "?limit=%d&offset=%d";
     private static final String CUSTOMER_URL = CUSTOMERS_URL + "/%s";
 
     private final Gson gson = new Gson();
