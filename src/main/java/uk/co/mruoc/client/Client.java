@@ -18,13 +18,13 @@ import static com.google.common.net.HttpHeaders.CONTENT_TYPE;
 import static java.util.Collections.singletonList;
 import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
-public class Client {
+class Client {
 
     private static final Logger LOG = Logger.getLogger(Client.class);
 
     private HttpClient client = HttpClientBuilder.create().build();
 
-    public Response execute(HttpRequestBase request) {
+    Response execute(HttpRequestBase request) {
         try {
             return Response.fromApacheResponse(client.execute(request));
         } catch (IOException e) {
@@ -34,8 +34,13 @@ public class Client {
         }
     }
 
-    public HttpGet createGet(String endpoint) {
+    HttpGet createGet(String endpoint) {
         return createGet(endpoint, new HashMap<>());
+    }
+
+    HttpPost createPost(String endpoint, String entity) {
+        Map<String, String> headers = new HashMap<>();
+        return createPost(endpoint, entity, headers);
     }
 
     private HttpGet createGet(String endpoint, Map<String, String> headers) {
@@ -44,11 +49,6 @@ public class Client {
         addHeaders(get, headers);
         logInfo("creating GET request for " + endpoint + " with headers " + singletonList(headers));
         return get;
-    }
-
-    public HttpPost createPost(String endpoint, String entity) {
-        Map<String, String> headers = new HashMap<>();
-        return createPost(endpoint, entity, headers);
     }
 
     private HttpPost createPost(String endpoint, String entity, Map<String, String> headers) {

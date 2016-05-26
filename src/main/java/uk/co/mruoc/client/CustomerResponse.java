@@ -7,7 +7,7 @@ public class CustomerResponse {
     private final JsonConverter jsonConverter = new JsonConverter();
     private final Response response;
 
-    public CustomerResponse(Response response) {
+    CustomerResponse(Response response) {
         this.response = response;
     }
 

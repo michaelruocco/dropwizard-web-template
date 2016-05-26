@@ -9,17 +9,17 @@ import uk.co.mruoc.api.Customer;
 
 import java.io.IOException;
 
-public class JsonConverter {
+class JsonConverter {
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final TypeFactory typeFactory = TypeFactory.defaultInstance();
 
-    public JsonConverter() {
+    JsonConverter() {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    public String toJson(Object value) {
+    String toJson(Object value) {
         try {
             return mapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
@@ -27,7 +27,7 @@ public class JsonConverter {
         }
     }
 
-    public Customer toCustomer(String json) {
+    Customer toCustomer(String json) {
         try {
             return mapper.readValue(json, Customer.class);
         } catch (IOException e) {
@@ -35,9 +35,9 @@ public class JsonConverter {
         }
     }
 
-    public static class JsonException extends RuntimeException {
+    private static class JsonException extends RuntimeException {
 
-        public JsonException(Throwable cause) {
+        JsonException(Throwable cause) {
             super(cause);
         }
 
