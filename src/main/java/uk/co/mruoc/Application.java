@@ -4,6 +4,7 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.jdbi.bundles.DBIExceptionsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.views.ViewBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import org.skife.jdbi.v2.DBI;
@@ -11,6 +12,7 @@ import uk.co.mruoc.health.CustomerTableHealthCheck;
 import uk.co.mruoc.health.Database;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.CustomerResource;
+import uk.co.mruoc.resources.CustomerViewResource;
 
 public class Application extends io.dropwizard.Application<Config> {
 
@@ -28,6 +30,7 @@ public class Application extends io.dropwizard.Application<Config> {
                 return config.getSwaggerBundleConfiguration();
             }
         });
+        bootstrap.addBundle(new ViewBundle<>());
     }
 
     @Override
@@ -38,6 +41,9 @@ public class Application extends io.dropwizard.Application<Config> {
         final CustomerDao customerDao = jdbi.onDemand(CustomerDao.class);
         final CustomerResource customerResource = new CustomerResource(customerDao);
         env.jersey().register(customerResource);
+
+        final CustomerViewResource customerViewResource = new CustomerViewResource(customerDao);
+        env.jersey().register(customerViewResource);
 
         final Database database = new Database(jdbi);
         final CustomerTableHealthCheck customerTableHealthCheck = new CustomerTableHealthCheck(database);

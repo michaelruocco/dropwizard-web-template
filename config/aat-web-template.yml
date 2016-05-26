@@ -12,3 +12,6 @@ database:
 
 swagger:
   resourcePackage: uk.co.mruoc.resources
+
+logging:
+  level: DEBUG
