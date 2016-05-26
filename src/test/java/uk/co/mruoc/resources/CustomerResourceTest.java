@@ -53,4 +53,21 @@ public class CustomerResourceTest {
         assertThat(response.getCustomer()).isEqualToComparingFieldByField(customer);
     }
 
+    @Test
+    public void shouldGetCustomer() {
+        Customer customer = new CustomerBuilder()
+                .setAccountNumber("123456")
+                .setFirstName("Michael")
+                .setSurname("Ruocco")
+                .setBalance(BigDecimal.valueOf(999))
+                .build();
+
+        client.createCustomer(customer);
+
+        CustomerResponse response = client.getCustomer(customer.getAccountNumber());
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getCustomer()).isEqualToComparingFieldByField(customer);
+    }
+
 }
