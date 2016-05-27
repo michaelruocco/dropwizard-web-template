@@ -13,6 +13,7 @@ import uk.co.mruoc.health.Database;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.CustomerResource;
 import uk.co.mruoc.resources.CustomerViewResource;
+import uk.co.mruoc.resources.IndexViewResource;
 
 public class Application extends io.dropwizard.Application<Config> {
 
@@ -35,19 +36,17 @@ public class Application extends io.dropwizard.Application<Config> {
 
     @Override
     public void run(Config config, Environment env) {
+        env.jersey().register(new IndexViewResource());
+
         final DBIFactory factory = new DBIFactory();
         final DBI jdbi = factory.build(env, config.getDataSourceFactory(), "database");
-
         final CustomerDao customerDao = jdbi.onDemand(CustomerDao.class);
-        final CustomerResource customerResource = new CustomerResource(customerDao);
-        env.jersey().register(customerResource);
 
-        final CustomerViewResource customerViewResource = new CustomerViewResource(customerDao);
-        env.jersey().register(customerViewResource);
+        env.jersey().register(new CustomerViewResource(customerDao));
+        env.jersey().register(new CustomerResource(customerDao));
 
         final Database database = new Database(jdbi);
-        final CustomerTableHealthCheck customerTableHealthCheck = new CustomerTableHealthCheck(database);
-        env.healthChecks().register("customerTable", customerTableHealthCheck);
+        env.healthChecks().register("customerTable", new CustomerTableHealthCheck(database));
     }
 
 }
