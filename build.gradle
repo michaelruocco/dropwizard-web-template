@@ -124,3 +124,14 @@ task startServer(type: SpawnProcessTask) {
 }
 
 task stopServer(type: KillProcessTask)
+
+task acceptanceTest(type: JavaExec) {
+    dependsOn startServer
+    finalizedBy stopServer
+    main = "cucumber.api.cli.Main"
+    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.cucumber.output
+    args = ['-p', 'pretty',
+            '-p', 'json:build/reports/cucumberResults.json',
+            '--glue', 'uk.co.mruoc',
+            'src/cucumber/resources']
+}
