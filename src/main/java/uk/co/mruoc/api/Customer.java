@@ -2,6 +2,7 @@ package uk.co.mruoc.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.ws.rs.FormParam;
 import java.math.BigDecimal;
 
 public class Customer {
@@ -23,23 +24,32 @@ public class Customer {
     }
 
     @JsonProperty
+    @FormParam("accountNumber")
     public String getAccountNumber() {
         return accountNumber;
     }
 
     @JsonProperty
+    @FormParam("firstName")
     public String getFirstName() {
         return firstName;
     }
 
     @JsonProperty
+    @FormParam("surname")
     public String getSurname() {
         return surname;
     }
 
     @JsonProperty
+    @FormParam("balance")
     public BigDecimal getBalance() {
         return balance;
+    }
+
+    public String getFullName() {
+        String fullName = firstName + " " + surname;
+        return fullName.trim();
     }
 
     public static class CustomerBuilder {
