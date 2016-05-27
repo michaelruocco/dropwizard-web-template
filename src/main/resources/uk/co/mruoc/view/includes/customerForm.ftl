@@ -1,18 +1,27 @@
-<table border="0">
-  <tr>
-    <td>Id:</td>
-    <td><input type="text" name="accountNumber" value="${customer.accountNumber!}"/></td>
-  </tr>
-  <tr>
-    <td>First Name:</td>
-    <td><input type="text" name="firstName" value="${customer.firstName!}"/></td>
-  </tr>
-  <tr>
-    <td>Surname:</td>
-    <td><input type="text" name="surname" value="${customer.surname!}"/></td>
-  </tr>
-  <tr>
-    <td>Balance:</td>
-    <td><input type="text" name="balance" value="${customer.balance!}"/></td>
-  </tr>
-</table>
+<div class="form-group">
+    <label class="control-label col-sm-2" for="accountNumber">Account Number:</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="Enter account number" value="${customer.accountNumber!}"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label col-sm-2" for="firstName">First Name:</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" value="${customer.firstName!}"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label col-sm-2" for="firstName">Surname:</label>
+    <div class="col-sm-10">
+        <input type="text" class="form-control" id="surname" name="surname" placeholder="Enter surname" value="${customer.surname!}"/>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label col-sm-2" for="firstName">Balance:</label>
+    <div class="col-sm-10">
+        <input type="number" class="form-control" id="balance" name="balance" placeholder="Enter balance" value="${customer.balance!}"/>
+    </div>
+</div>

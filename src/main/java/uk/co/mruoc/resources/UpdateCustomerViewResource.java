@@ -5,38 +5,40 @@ import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
+import uk.co.mruoc.view.UpdateCustomerView;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
+import java.math.BigDecimal;
 
-import static javax.ws.rs.core.MediaType.*;
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static uk.co.mruoc.api.Customer.CustomerBuilder;
 
-@Path("/createCustomer/")
-public class CreateCustomerViewResource {
+@Path("/updateCustomer/")
+public class UpdateCustomerViewResource {
 
     private final FormToCustomerConverter converter = new FormToCustomerConverter();
     private final CustomerFacade customerFacade;
 
-    public CreateCustomerViewResource(CustomerFacade customerFacade) {
+    public UpdateCustomerViewResource(CustomerFacade customerFacade) {
         this.customerFacade = customerFacade;
     }
 
     @GET
-    public View showCreateCustomer() {
-        return new CreateCustomerView();
+    public View showUpdateCustomer(@QueryParam("accountNumber") String accountNumber) {
+        Customer customer = customerFacade.read(accountNumber);
+        System.out.println("updating customer " + customer.getFullName());
+        return new UpdateCustomerView(customer);
     }
 
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
-    public View createCustomer(MultivaluedMap<String, String> form, @Context UriInfo info) {
+    public View updateCustomer(MultivaluedMap<String, String> form, @Context UriInfo info) {
         try {
             Customer customer = converter.toCustomer(form);
-            customerFacade.create(customer);
+            customerFacade.update(customer);
             return new CustomersView(info, customerFacade.read());
         } catch (Exception e) {
             return new CreateCustomerView(e.getMessage());

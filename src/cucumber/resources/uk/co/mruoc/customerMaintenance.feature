@@ -35,3 +35,16 @@ Feature: Customer Maintenance
       | 000001        | Kiel      | Boatman | 5000    |
       | 000002        | Craig     | Betts   | 7500    |
     And the response header contains "X-Total-Count" with value "3"
+
+  Scenario: Update customer
+    Given the following customers exist
+      | id     | firstName | surname | balance |
+      | 000009 | Dean      | Heatlie | 33333   |
+    And the customer needs to be updated to
+      | id     | firstName | surname  | balance |
+      | 000009 | Updated   | Customer | 77777   |
+    When the customer data is updated
+    Then the service returns a response code 200
+    And the following customer is returned
+      | id     | firstName | surname  | balance |
+      | 000009 | Updated   | Customer | 77777   |

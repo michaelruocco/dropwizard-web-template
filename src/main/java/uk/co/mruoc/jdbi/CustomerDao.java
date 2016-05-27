@@ -23,6 +23,9 @@ public interface CustomerDao {
     @SqlQuery("select " + FIELDS + " from customer")
     List<Customer> read();
 
+    @SqlUpdate("update customer set firstName = :firstName, surname = :surname, balance = :balance where accountNumber = :accountNumber")
+    void update(@BindBean Customer customer);
+
     void close();
 
 }

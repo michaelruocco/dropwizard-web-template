@@ -17,7 +17,7 @@ class JsonConverter {
 
     JsonConverter() {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     String toJson(Object value) {

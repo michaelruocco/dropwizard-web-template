@@ -99,4 +99,28 @@ public class CustomerResourceTest {
         assertThat(response.getCustomers().get(1)).isEqualToComparingFieldByField(customer2);
     }
 
+    @Test
+    public void shouldUpdateCustomer() {
+        Customer customer = new CustomerBuilder()
+                .setAccountNumber("111111")
+                .setFirstName("Michael")
+                .setSurname("Ruocco")
+                .setBalance(BigDecimal.valueOf(999.00))
+                .build();
+
+        client.createCustomer(customer);
+
+        Customer updateCustomer = new CustomerBuilder()
+                .setAccountNumber("111111")
+                .setFirstName("Laura")
+                .setSurname("Noble")
+                .setBalance(BigDecimal.valueOf(123.00))
+                .build();
+
+        CustomerResponse response = client.updateCustomer(updateCustomer);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertThat(response.getCustomer()).isEqualToComparingFieldByField(updateCustomer);
+    }
+
 }

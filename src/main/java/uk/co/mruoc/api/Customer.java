@@ -1,10 +1,11 @@
 package uk.co.mruoc.api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.ws.rs.FormParam;
 import java.math.BigDecimal;
 
+@JsonIgnoreProperties({"fullName"})
 public class Customer {
 
     private String accountNumber;
@@ -24,25 +25,21 @@ public class Customer {
     }
 
     @JsonProperty
-    @FormParam("accountNumber")
     public String getAccountNumber() {
         return accountNumber;
     }
 
     @JsonProperty
-    @FormParam("firstName")
     public String getFirstName() {
         return firstName;
     }
 
     @JsonProperty
-    @FormParam("surname")
     public String getSurname() {
         return surname;
     }
 
     @JsonProperty
-    @FormParam("balance")
     public BigDecimal getBalance() {
         return balance;
     }

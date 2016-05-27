@@ -1,9 +1,11 @@
 package uk.co.mruoc.client;
 
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -43,6 +45,11 @@ class Client {
         return createPost(endpoint, entity, headers);
     }
 
+    HttpPut createPut(String endpoint, String entity) {
+        Map<String, String> headers = new HashMap<>();
+        return createPut(endpoint, entity, headers);
+    }
+
     private HttpGet createGet(String endpoint, Map<String, String> headers) {
         HttpGet get = new HttpGet(endpoint);
         headers.put(ACCEPT, APPLICATION_JSON.getMimeType());
@@ -53,11 +60,22 @@ class Client {
 
     private HttpPost createPost(String endpoint, String entity, Map<String, String> headers) {
         HttpPost post = new HttpPost(endpoint);
-        post.setEntity(new StringEntity(entity, APPLICATION_JSON));
-        headers.put(CONTENT_TYPE, APPLICATION_JSON.toString());
-        addHeaders(post, headers);
+        setupEntityRequest(post, entity, headers);
         logInfo("creating POST request for " + endpoint + " with entity " + entity + " and headers " + singletonList(headers));
         return post;
+    }
+
+    private HttpPut createPut(String endpoint, String entity, Map<String, String> headers) {
+        HttpPut put = new HttpPut(endpoint);
+        setupEntityRequest(put, entity, headers);
+        logInfo("creating PUT request for " + endpoint + " with entity " + entity + " and headers " + singletonList(headers));
+        return put;
+    }
+
+    private void setupEntityRequest(HttpEntityEnclosingRequest request, String entity, Map<String, String> headers) {
+        request.setEntity(new StringEntity(entity, APPLICATION_JSON));
+        headers.put(CONTENT_TYPE, APPLICATION_JSON.toString());
+        addHeaders(request, headers);
     }
 
     private void addHeaders(HttpRequest request, Map<String, String> headers) {

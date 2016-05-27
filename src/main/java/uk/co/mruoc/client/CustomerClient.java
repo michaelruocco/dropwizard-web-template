@@ -2,6 +2,7 @@ package uk.co.mruoc.client;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import uk.co.mruoc.api.Customer;
 
@@ -24,6 +25,12 @@ public class CustomerClient {
     public CustomerResponse createCustomer(Customer customer) {
         HttpPost post = client.createPost(CUSTOMERS_URL, jsonConverter.toJson(customer));
         Response response = execute(post);
+        return new CustomerResponse(response);
+    }
+
+    public CustomerResponse updateCustomer(Customer customer) {
+        HttpPut put = client.createPut(CUSTOMERS_URL, jsonConverter.toJson(customer));
+        Response response = execute(put);
         return new CustomerResponse(response);
     }
 

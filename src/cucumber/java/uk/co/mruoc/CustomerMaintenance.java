@@ -33,6 +33,7 @@ public class CustomerMaintenance {
 
     private CustomerResponse customerResponse;
     private Customer newCustomer;
+    private Customer updateCustomer;
 
     @After
     public void tearDown() {
@@ -56,6 +57,12 @@ public class CustomerMaintenance {
         customerResponse = client.createCustomer(newCustomer);
     }
 
+    @Given("^the customer needs to be updated to$")
+    public void the_customer_needs_to_be_updated_to(DataTable table) throws Throwable {
+        List<Customer> inputCustomers = customerConverter.toCustomers(table);
+        this.updateCustomer = inputCustomers.get(0);
+    }
+
     @When("^a get request is made for customer \"([^\"]*)\"$")
     public void a_get_request_is_made_for_customer(String id) throws Throwable {
         customerResponse = client.getCustomer(id);
@@ -64,6 +71,11 @@ public class CustomerMaintenance {
     @When("^a get request is made for all customers$")
     public void a_get_request_is_made_for_all_customers() throws Throwable {
         customerResponse = client.getCustomers();
+    }
+
+    @When("^the customer data is updated")
+    public void the_customer_data_is_updated() throws Throwable {
+        customerResponse = client.updateCustomer(updateCustomer);
     }
 
     @Then("^the following customer is returned$")

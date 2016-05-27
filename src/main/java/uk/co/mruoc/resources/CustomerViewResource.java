@@ -1,5 +1,6 @@
 package uk.co.mruoc.resources;
 
+import io.dropwizard.views.View;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomerView;
 
@@ -18,7 +19,7 @@ public class CustomerViewResource {
 
     @GET
     @Path("{accountNumber}")
-    public CustomerView getCustomer(@PathParam("accountNumber") String accountNumber) {
+    public View getCustomer(@PathParam("accountNumber") String accountNumber) {
         return new CustomerView(customerFacade.read(accountNumber));
     }
 

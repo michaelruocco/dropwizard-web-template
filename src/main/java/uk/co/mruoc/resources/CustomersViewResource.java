@@ -1,5 +1,6 @@
 package uk.co.mruoc.resources;
 
+import io.dropwizard.views.View;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomersView;
 
@@ -18,7 +19,7 @@ public class CustomersViewResource {
     }
 
     @GET
-    public CustomersView listCustomers(@Context UriInfo info) {
+    public View listCustomers(@Context UriInfo info) {
         return new CustomersView(info, customerFacade.read());
     }
 
