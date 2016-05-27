@@ -13,10 +13,10 @@ public interface CustomerDao {
     String FIELDS = "accountNumber, firstName, surname, balance";
 
     @SqlUpdate("insert into customer (" + FIELDS + ") values (:accountNumber, :firstName, :surname, :balance)")
-    void insert(@BindBean Customer customer);
+    void create(@BindBean Customer customer);
 
     @SqlQuery("select " + FIELDS + " from customer where accountNumber = :accountNumber")
-    Customer getCustomer(@Bind("accountNumber") String accountNumber);
+    Customer readCustomer(@Bind("accountNumber") String accountNumber);
 
     void close();
 

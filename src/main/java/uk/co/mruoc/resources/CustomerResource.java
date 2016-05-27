@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.jdbi.CustomerDao;
 
 import javax.ws.rs.*;
@@ -20,10 +21,10 @@ import java.net.URI;
 @Consumes(MediaType.APPLICATION_JSON)
 public class CustomerResource {
 
-    private final CustomerDao customerDao;
+    private final CustomerFacade facade;
 
-    public CustomerResource(CustomerDao customerDao) {
-        this.customerDao = customerDao;
+    public CustomerResource(CustomerFacade facade) {
+        this.facade = facade;
     }
 
     @GET
@@ -31,7 +32,7 @@ public class CustomerResource {
     @ApiOperation(value = "Get single customer")
     @Timed
     public Response getCustomer(@PathParam("accountNumber") String accountNumber) {
-        Customer customer = customerDao.getCustomer(accountNumber);
+        Customer customer = facade.read(accountNumber);
         return Response.ok().entity(customer).build();
     }
 
@@ -39,8 +40,8 @@ public class CustomerResource {
     @ApiOperation(value = "Post single customer")
     @Timed
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
-        customerDao.insert(customer);
-        Customer newCustomer = customerDao.getCustomer(customer.getAccountNumber());
+        facade.create(customer);
+        Customer newCustomer = facade.read(customer.getAccountNumber());
         URI uri = info.getBaseUriBuilder().path("ws/v1/customers/" + newCustomer.getAccountNumber()).build();
         return Response.created(uri).entity(newCustomer).build();
     }
