@@ -1,4 +1,3 @@
-<#-- @ftlvariable name="" type="co.uk.mruoc.view.CustomerView" -->
 <html>
 <head>
   <title>Welcome!</title>
