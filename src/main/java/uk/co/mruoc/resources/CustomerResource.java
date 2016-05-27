@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.List;
 
 @Path("ws/v1/customers/")
 @Api(value = "ws/v1/customers/", description = "Customer Maintenance")
@@ -33,7 +34,20 @@ public class CustomerResource {
     @Timed
     public Response getCustomer(@PathParam("accountNumber") String accountNumber) {
         Customer customer = facade.read(accountNumber);
-        return Response.ok().entity(customer).build();
+        return Response.ok()
+                .entity(customer)
+                .build();
+    }
+
+    @GET
+    @ApiOperation(value = "Get all customers")
+    @Timed
+    public Response getCustomers() {
+        List<Customer> customers = facade.read();
+        return Response.ok()
+                .entity(customers)
+                .header("X-Total-Count", customers.size())
+                .build();
     }
 
     @POST
@@ -43,7 +57,9 @@ public class CustomerResource {
         facade.create(customer);
         Customer newCustomer = facade.read(customer.getAccountNumber());
         URI uri = info.getBaseUriBuilder().path("ws/v1/customers/" + newCustomer.getAccountNumber()).build();
-        return Response.created(uri).entity(newCustomer).build();
+        return Response.created(uri)
+                .entity(newCustomer)
+                .build();
     }
 
 }

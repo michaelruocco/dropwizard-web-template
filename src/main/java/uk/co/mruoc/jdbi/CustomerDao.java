@@ -7,6 +7,8 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import uk.co.mruoc.api.Customer;
 
+import java.util.List;
+
 @RegisterMapper(CustomerMapper.class)
 public interface CustomerDao {
 
@@ -16,7 +18,10 @@ public interface CustomerDao {
     void create(@BindBean Customer customer);
 
     @SqlQuery("select " + FIELDS + " from customer where accountNumber = :accountNumber")
-    Customer readCustomer(@Bind("accountNumber") String accountNumber);
+    Customer read(@Bind("accountNumber") String accountNumber);
+
+    @SqlQuery("select " + FIELDS + " from customer")
+    List<Customer> read();
 
     void close();
 

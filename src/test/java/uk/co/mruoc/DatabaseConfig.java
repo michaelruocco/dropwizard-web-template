@@ -22,6 +22,10 @@ public class DatabaseConfig {
         return getStringValue("password");
     }
 
+    public String getDriverClass() {
+        return getStringValue("driverClass");
+    }
+
     private String getStringValue(String key) {
         Object value = values.get(key);
         if (value == null)

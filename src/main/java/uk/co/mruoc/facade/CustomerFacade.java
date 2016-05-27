@@ -4,6 +4,8 @@ import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.service.CreateCustomerService;
 import uk.co.mruoc.service.ReadCustomerService;
 
+import java.util.List;
+
 public class CustomerFacade {
 
     private final ReadCustomerService readService;
@@ -17,6 +19,8 @@ public class CustomerFacade {
     public Customer read(String accountNumber) {
         return readService.read(accountNumber);
     }
+
+    public List<Customer> read() { return readService.read(); }
 
     public void create(Customer customer) {
         createService.create(customer);

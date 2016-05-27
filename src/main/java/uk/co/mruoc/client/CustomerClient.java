@@ -7,11 +7,19 @@ import uk.co.mruoc.api.Customer;
 
 public class CustomerClient {
 
-    private static final String CUSTOMERS_URL = "http://localhost:8090/web-template/ws/v1/customers";
+    private static final String CUSTOMERS_URL = "http://localhost:8090/web-template/ws/v1/customers/";
 
     private final JsonConverter jsonConverter = new JsonConverter();
 
     private Client client = new Client();
+
+    public CustomerResponse getCustomer(String accountNumber) {
+        return doGet(CUSTOMERS_URL + accountNumber);
+    }
+
+    public CustomerResponse getCustomers() {
+        return doGet(CUSTOMERS_URL);
+    }
 
     public CustomerResponse createCustomer(Customer customer) {
         HttpPost post = client.createPost(CUSTOMERS_URL, jsonConverter.toJson(customer));
@@ -19,8 +27,8 @@ public class CustomerClient {
         return new CustomerResponse(response);
     }
 
-    public CustomerResponse getCustomer(String accountNumber) {
-        HttpGet get = client.createGet(CUSTOMERS_URL + "/" + accountNumber);
+    private CustomerResponse doGet(String endpoint) {
+        HttpGet get = client.createGet(endpoint);
         Response response = execute(get);
         return new CustomerResponse(response);
     }
