@@ -1,4 +1,4 @@
-package uk.co.mruoc.resources;
+package uk.co.mruoc.resources.rest;
 
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.After;

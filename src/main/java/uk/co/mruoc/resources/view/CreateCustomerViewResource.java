@@ -27,7 +27,7 @@ public class CreateCustomerViewResource {
     }
 
     @GET
-    public View showCreateCustomer() {
+    public CreateCustomerView showCreateCustomer() {
         return new CreateCustomerView();
     }
 
