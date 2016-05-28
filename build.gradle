@@ -57,6 +57,7 @@ dependencies {
     testCompile 'org.yaml:snakeyaml:1.17'
     testCompile 'com.h2database:h2:1.4.191'
     testCompile 'commons-dbcp:commons-dbcp:1.4'
+    testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
 def getConfigPath() {
