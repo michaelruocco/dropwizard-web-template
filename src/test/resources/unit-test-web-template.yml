@@ -11,4 +11,4 @@ database:
   url: jdbc:h2:./h2/web_template;MODE=MySQL
 
 swagger:
-  resourcePackage: uk.co.mruoc.resources
+  resourcePackage: uk.co.mruoc.resources.rest

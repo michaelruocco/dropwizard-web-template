@@ -11,7 +11,7 @@ database:
   url: jdbc:mysql://localhost:3307/web_template
 
 swagger:
-  resourcePackage: uk.co.mruoc.resources
+  resourcePackage: uk.co.mruoc.resources.rest
 
 logging:
   level: INFO

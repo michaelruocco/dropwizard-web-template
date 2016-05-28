@@ -1,4 +1,4 @@
-package uk.co.mruoc.resources;
+package uk.co.mruoc.resources.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.wordnik.swagger.annotations.Api;

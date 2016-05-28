@@ -1,4 +1,4 @@
-package uk.co.mruoc.resources;
+package uk.co.mruoc.resources.view;
 
 import uk.co.mruoc.api.Customer;
 

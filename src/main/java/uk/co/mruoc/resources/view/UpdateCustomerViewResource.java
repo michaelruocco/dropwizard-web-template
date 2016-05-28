@@ -1,4 +1,4 @@
-package uk.co.mruoc.resources;
+package uk.co.mruoc.resources.view;
 
 import io.dropwizard.views.View;
 import uk.co.mruoc.api.Customer;
@@ -11,10 +11,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
-import java.math.BigDecimal;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static uk.co.mruoc.api.Customer.CustomerBuilder;
 
 @Path("/updateCustomer/")
 public class UpdateCustomerViewResource {
