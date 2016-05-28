@@ -11,8 +11,6 @@ import org.skife.jdbi.v2.DBI;
 import uk.co.deloittedigital.dropwizard.hikari.HikariBundle;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.facade.CustomerFacade.CustomerFacadeBuilder;
-import uk.co.mruoc.health.CustomerTableHealthCheck;
-import uk.co.mruoc.health.Database;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.*;
 import uk.co.mruoc.service.CreateCustomerService;
