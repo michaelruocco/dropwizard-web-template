@@ -18,7 +18,25 @@ public class TestCustomerBuilder {
                 .build();
     }
 
-    public Customer buildCustomer2() {
+    public Customer buildUpdateCustomer1() {
+        return new CustomerBuilder()
+                .setAccountNumber("111111")
+                .setFirstName("Updated")
+                .setSurname("Updated")
+                .setBalance(BigDecimal.valueOf(777))
+                .build();
+    }
+
+    public Customer buildNewCustomer() {
+        return new CustomerBuilder()
+                .setAccountNumber("333333")
+                .setFirstName("New")
+                .setSurname("Customer")
+                .setBalance(BigDecimal.valueOf(212))
+                .build();
+    }
+
+    private Customer buildCustomer2() {
         return new CustomerBuilder()
                 .setAccountNumber("222222")
                 .setFirstName("Laura")
