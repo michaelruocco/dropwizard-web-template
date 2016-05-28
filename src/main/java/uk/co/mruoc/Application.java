@@ -65,8 +65,6 @@ public class Application extends io.dropwizard.Application<Config> {
         env.jersey().register(new DeleteCustomerViewResource(customerFacade));
 
         env.jersey().register(new CustomerResource(customerFacade));
-
-        env.healthChecks().register("customerTable", new CustomerTableHealthCheck(new Database(dbi)));
     }
 
 }
