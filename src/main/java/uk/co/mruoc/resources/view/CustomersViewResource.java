@@ -19,7 +19,7 @@ public class CustomersViewResource {
     }
 
     @GET
-    public View listCustomers(@Context UriInfo info) {
+    public CustomersView listCustomers(@Context UriInfo info) {
         return new CustomersView(info, customerFacade.read());
     }
 
