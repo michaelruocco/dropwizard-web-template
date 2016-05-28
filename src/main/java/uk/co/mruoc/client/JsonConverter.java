@@ -7,17 +7,19 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import uk.co.mruoc.api.Customer;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 class JsonConverter {
 
     private final ObjectMapper mapper = new ObjectMapper();
     private final TypeFactory typeFactory = TypeFactory.defaultInstance();
+
     private final CollectionType customerListType = typeFactory.constructCollectionType(List.class, Customer.class);
 
     JsonConverter() {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        //mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     String toJson(Object value) {
@@ -29,22 +31,30 @@ class JsonConverter {
     }
 
     Customer toCustomer(String json) {
-        try {
-            return mapper.readValue(json, Customer.class);
-        } catch (IOException e) {
-            throw new JsonException(e);
-        }
+        return toType(json, Customer.class);
     }
 
     List<Customer> toCustomers(String json) {
+        return toCollectionType(json, customerListType);
+    }
+
+    private <T> T toCollectionType(String json, CollectionType type) {
         try {
-            return mapper.readValue(json, customerListType);
+            return mapper.readValue(json, type);
         } catch (IOException e) {
             throw new JsonException(e);
         }
     }
 
-    private static class JsonException extends RuntimeException {
+    private <T> T toType(String json, Class<T> type) {
+        try {
+            return mapper.readValue(json, type);
+        } catch (IOException e) {
+            throw new JsonException(e);
+        }
+    }
+
+    public static class JsonException extends RuntimeException {
 
         JsonException(Throwable cause) {
             super(cause);
