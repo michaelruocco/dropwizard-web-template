@@ -123,4 +123,20 @@ public class CustomerResourceTest {
         assertThat(response.getCustomer()).isEqualToComparingFieldByField(updateCustomer);
     }
 
+    @Test
+    public void shouldDeleteCustomer() {
+        Customer customer = new CustomerBuilder()
+                .setAccountNumber("111111")
+                .setFirstName("Michael")
+                .setSurname("Ruocco")
+                .setBalance(BigDecimal.valueOf(999.00))
+                .build();
+
+        client.createCustomer(customer);
+
+        CustomerResponse response = client.deleteCustomer(customer.getAccountNumber());
+
+        assertThat(response.getStatusCode()).isEqualTo(204);
+    }
+
 }

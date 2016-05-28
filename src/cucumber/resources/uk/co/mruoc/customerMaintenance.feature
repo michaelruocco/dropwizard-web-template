@@ -48,3 +48,10 @@ Feature: Customer Maintenance
     And the following customer is returned
       | id     | firstName | surname  | balance |
       | 000009 | Updated   | Customer | 77777   |
+
+  Scenario: Delete customer
+    Given the following customers exist
+      | id     | firstName | surname | balance |
+      | 000011 | Laura     | Noble   | 88888   |
+    When the customer "000011" is deleted
+    Then the service returns a response code 204

@@ -3,10 +3,7 @@ package uk.co.mruoc.client;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
@@ -48,6 +45,12 @@ class Client {
     HttpPut createPut(String endpoint, String entity) {
         Map<String, String> headers = new HashMap<>();
         return createPut(endpoint, entity, headers);
+    }
+
+    HttpDelete createDelete(String endpoint) {
+        HttpDelete delete = new HttpDelete(endpoint);
+        logInfo("creating DELETE request for " + endpoint);
+        return delete;
     }
 
     private HttpGet createGet(String endpoint, Map<String, String> headers) {

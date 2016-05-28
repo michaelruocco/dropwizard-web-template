@@ -16,6 +16,7 @@ import uk.co.mruoc.health.Database;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.*;
 import uk.co.mruoc.service.CreateCustomerService;
+import uk.co.mruoc.service.DeleteCustomerService;
 import uk.co.mruoc.service.ReadCustomerService;
 import uk.co.mruoc.service.UpdateCustomerService;
 
@@ -53,13 +54,15 @@ public class Application extends io.dropwizard.Application<Config> {
         final CustomerFacade customerFacade = new CustomerFacadeBuilder()
                 .setCreateService(new CreateCustomerService(customerDao))
                 .setReadService(new ReadCustomerService(customerDao))
-                .setUpdateService(new UpdateCustomerService(customerDao))
+                .setDeleteService(new UpdateCustomerService(customerDao))
+                .setDeleteService(new DeleteCustomerService(customerDao))
                 .build();
 
         env.jersey().register(new CustomersViewResource(customerFacade));
         env.jersey().register(new CustomerViewResource(customerFacade));
         env.jersey().register(new CreateCustomerViewResource(customerFacade));
         env.jersey().register(new UpdateCustomerViewResource(customerFacade));
+        env.jersey().register(new DeleteCustomerViewResource(customerFacade));
 
         env.jersey().register(new CustomerResource(customerFacade));
 

@@ -12,6 +12,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Balance</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -19,6 +20,7 @@
                         <tr>
                             <td><a href="updateCustomer?accountNumber=${customer.accountNumber}">${customer.fullName}</a></td>
                             <td>${customer.balance}</td>
+                            <td><a href="deleteCustomer?accountNumber=${customer.accountNumber}" class="btn btn-default btn-xs">Delete</a>
                         <tr>
                     </#items>
                 </tbody>

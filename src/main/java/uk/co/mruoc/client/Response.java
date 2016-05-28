@@ -34,10 +34,16 @@ class Response {
 
     static Response fromApacheResponse(HttpResponse response) throws IOException {
         int statusCode = response.getStatusLine().getStatusCode();
-        String body = EntityUtils.toString(response.getEntity());
+        String body = extractBody(response);
         Map<String, String> headers = extractHeaders(response);
-
         return new Response(statusCode, body, headers);
+    }
+
+    private static String extractBody(HttpResponse response) throws IOException {
+        if (response.getEntity() == null)
+            return "";
+        return EntityUtils.toString(response.getEntity());
+
     }
 
     private static Map<String, String> extractHeaders(HttpResponse response) {

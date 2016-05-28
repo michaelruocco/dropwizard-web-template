@@ -28,7 +28,7 @@ public class CustomerResource {
 
     @GET
     @Path("{accountNumber}")
-    @ApiOperation(value = "Get single customer")
+    @ApiOperation(value = "Get customer")
     @Timed
     public Response getCustomer(@PathParam("accountNumber") String accountNumber) {
         Customer customer = facade.read(accountNumber);
@@ -49,7 +49,7 @@ public class CustomerResource {
     }
 
     @POST
-    @ApiOperation(value = "Create single customer")
+    @ApiOperation(value = "Create customer")
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
@@ -62,7 +62,7 @@ public class CustomerResource {
     }
 
     @PUT
-    @ApiOperation(value = "Update single customer")
+    @ApiOperation(value = "Update customer")
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCustomer(@ApiParam Customer customer) {
@@ -71,6 +71,15 @@ public class CustomerResource {
         return Response.ok()
                 .entity(updatedCustomer)
                 .build();
+    }
+
+    @DELETE
+    @Path("{accountNumber}")
+    @ApiOperation(value = "Delete customer")
+    @Timed
+    public Response deleteCustomer(@PathParam("accountNumber") String accountNumber) {
+        facade.delete(accountNumber);
+        return Response.noContent().build();
     }
 
 }

@@ -78,6 +78,11 @@ public class CustomerMaintenance {
         customerResponse = client.updateCustomer(updateCustomer);
     }
 
+    @When("^the customer \"([^\"]*)\" is deleted$")
+    public void the_customer_is_deleted(String accountNumber) throws Throwable {
+        customerResponse = client.deleteCustomer(accountNumber);
+    }
+
     @Then("^the following customer is returned$")
     public void the_following_customer_is_returned(DataTable table) throws Throwable {
         List<Customer> expectedCustomers = customerConverter.toCustomers(table);

@@ -26,6 +26,9 @@ public interface CustomerDao {
     @SqlUpdate("update customer set firstName = :firstName, surname = :surname, balance = :balance where accountNumber = :accountNumber")
     void update(@BindBean Customer customer);
 
+    @SqlUpdate("delete from customer where accountNumber = :accountNumber")
+    void delete(@Bind("accountNumber") String accountNumber);
+
     void close();
 
 }
