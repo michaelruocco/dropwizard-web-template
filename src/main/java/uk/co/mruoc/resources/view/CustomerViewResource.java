@@ -19,7 +19,7 @@ public class CustomerViewResource {
 
     @GET
     @Path("{accountNumber}")
-    public View getCustomer(@PathParam("accountNumber") String accountNumber) {
+    public CustomerView getCustomer(@PathParam("accountNumber") String accountNumber) {
         return new CustomerView(customerFacade.read(accountNumber));
     }
 
