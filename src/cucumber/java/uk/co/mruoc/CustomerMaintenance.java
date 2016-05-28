@@ -37,7 +37,7 @@ public class CustomerMaintenance {
 
     @After
     public void tearDown() {
-        database.clearCustomerTable();
+        database.clearCustomers();
     }
 
     @Given("^the following customers exist$")
