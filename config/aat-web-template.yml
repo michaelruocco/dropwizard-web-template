@@ -5,7 +5,7 @@ server:
     port: 8090
 
 database:
-  driverClass: com.mysql.jdbc.Driver
+  driverClass: com.mysql.cj.jdbc.Driver
   user: root
   password:
   url: jdbc:mysql://localhost:3307/web_template
