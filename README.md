@@ -29,8 +29,7 @@ Upon running this task the script will do the following (aside from the usual co
 * Start up the application
 
 Once this is complete you will be able to view the application [here](http://localhost:8090/web-template). 
-This will show you the web interface that you can use to create, update and delete customers. The RESTful endpoints for
-performing the same operations can be found [here](http://localhost:8090/web-template/ws/v1/customers). If you want to
+This will show you the web interface that you can use to create, update and delete customers. If you want to
 use the swagger documentation to explore these endpoints you can do [here](http://localhost:8090/web-template/swagger).
 
 You should also be aware that because the application is using an embedded MySql instance, the data that you create will
