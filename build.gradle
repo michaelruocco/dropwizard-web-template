@@ -14,6 +14,7 @@ buildscript {
         classpath 'com.github.michaelruocco:embedded-mysql-plugin:2.0.0'
         classpath 'com.github.samueltbrown:gradle-cucumber-plugin:0.9'
         classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
     }
 }
 
@@ -24,6 +25,8 @@ apply plugin: 'application'
 apply plugin: 'embedded-mysql'
 apply plugin: 'com.github.samueltbrown.cucumber'
 apply plugin: 'com.wiredforcode.spawn'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 
 project.ext {
     artifactId = "dropwizard-web-template"
@@ -133,4 +136,11 @@ task acceptanceTest(type: JavaExec) {
             '-p', 'json:build/reports/cucumberResults.json',
             '--glue', 'uk.co.mruoc',
             'src/cucumber/resources']
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
 }
