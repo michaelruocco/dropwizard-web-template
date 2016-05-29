@@ -1,4 +1,3 @@
-sudo: false
 language: java
 
 jdk:
@@ -7,6 +6,10 @@ jdk:
 script:
   - ./gradlew check --stacktrace
   - ./gradlew acceptanceTest --stacktrace
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y libaio1
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
