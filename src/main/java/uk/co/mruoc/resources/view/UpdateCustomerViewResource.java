@@ -25,21 +25,20 @@ public class UpdateCustomerViewResource {
     }
 
     @GET
-    public View showUpdateCustomer(@QueryParam("accountNumber") String accountNumber) {
+    public UpdateCustomerView showUpdateCustomer(@QueryParam("accountNumber") String accountNumber) {
         Customer customer = customerFacade.read(accountNumber);
-        System.out.println("updating customer " + customer.getFullName());
         return new UpdateCustomerView(customer);
     }
 
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
     public View updateCustomer(MultivaluedMap<String, String> form, @Context UriInfo info) {
+        Customer customer = converter.toCustomer(form);
         try {
-            Customer customer = converter.toCustomer(form);
             customerFacade.update(customer);
             return new CustomersView(info, customerFacade.read());
         } catch (Exception e) {
-            return new CreateCustomerView(e.getMessage());
+            return new UpdateCustomerView(customer, e.getMessage());
         }
     }
 
