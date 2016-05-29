@@ -1,5 +1,9 @@
 # Web Template
 
+[![Build Status](https://travis-ci.org/michaelruocco/dropwizard-web-template.svg?branch=master)](https://travis-ci.org/michaelruocco/dropwizard-web-template)
+[![Coverage Status](https://coveralls.io/repos/github/michaelruocco/dropwizard-web-template/badge.svg?branch=master)](https://coveralls.io/github/michaelruocco/dropwizard-web-template?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/574ac6f5ce8d0e0047373380/badge.svg?style=flat)](https://www.versioneye.com/user/projects/574ac6f5ce8d0e0047373380)
+
 This project is a web application used to maintain a simple customer entity making use of the dropwizard framework.
 It is designed to demonstrate some of the principals that should be used when constructing a web application.
 
