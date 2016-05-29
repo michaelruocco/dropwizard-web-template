@@ -2,6 +2,7 @@ package uk.co.mruoc.resources.view;
 
 import io.dropwizard.views.View;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.exception.CustomerAlreadyExistsException;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
@@ -38,7 +39,7 @@ public class CreateCustomerViewResource {
             Customer customer = converter.toCustomer(form);
             customerFacade.create(customer);
             return new CustomersView(info, customerFacade.read());
-        } catch (Exception e) {
+        } catch (CustomerAlreadyExistsException e) {
             return new CreateCustomerView(e.getMessage());
         }
     }

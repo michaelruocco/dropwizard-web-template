@@ -1,6 +1,7 @@
 package uk.co.mruoc.client;
 
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.api.ErrorMessage;
 
 import java.util.List;
 
@@ -27,6 +28,11 @@ public class CustomerResponse {
 
     public List<Customer> getCustomers() {
         return jsonConverter.toCustomers(getBody());
+    }
+
+    public String getErrorMessage() {
+        ErrorMessage error = jsonConverter.toErrorMessage(getBody());
+        return error.getMessage();
     }
 
     private String getBody() {

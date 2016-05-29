@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.api.ErrorMessage;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -30,6 +31,11 @@ class JsonConverter {
         }
     }
 
+    ErrorMessage toErrorMessage(String json) {
+        return toType(json, ErrorMessage.class);
+    }
+
+
     Customer toCustomer(String json) {
         return toType(json, Customer.class);
     }
@@ -54,7 +60,7 @@ class JsonConverter {
         }
     }
 
-    public static class JsonException extends RuntimeException {
+    static class JsonException extends RuntimeException {
 
         JsonException(Throwable cause) {
             super(cause);

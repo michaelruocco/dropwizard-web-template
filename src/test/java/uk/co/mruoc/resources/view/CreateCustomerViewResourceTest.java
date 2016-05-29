@@ -3,6 +3,7 @@ package uk.co.mruoc.resources.view;
 import org.junit.Test;
 import uk.co.mruoc.*;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.exception.CustomerAlreadyExistsException;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
@@ -50,12 +51,11 @@ public class CreateCustomerViewResourceTest {
     public void shouldShowErrorIfCreateCustomerFails() {
         Customer customer = customerBuilder.buildCustomer1();
         MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        String error = "an error occurred";
-        doThrow(new RuntimeException(error)).when(facade).create(any(Customer.class));
+        doThrow(new CustomerAlreadyExistsException("123456")).when(facade).create(any(Customer.class));
 
         CreateCustomerView view = (CreateCustomerView) resource.createCustomer(form, uriInfo);
 
-        assertThat(view.getError()).isEqualTo(error);
+        assertThat(view.getError()).isEqualTo("customer 123456 already exists");
     }
 
 }

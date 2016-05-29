@@ -52,6 +52,16 @@ public class CustomerResourceTest {
     }
 
     @Test
+    public void shouldReturnErrorIfCustomerAlreadyExists() {
+        Customer customer = customerBuilder.buildCustomer1();
+
+        CustomerResponse response = client.createCustomer(customer);
+
+        assertThat(response.getStatusCode()).isEqualTo(409);
+        assertThat(response.getErrorMessage()).isEqualTo("customer 111111 already exists");
+    }
+
+    @Test
     public void shouldGetCustomer() {
         Customer customer = customerBuilder.buildCustomer1();
 

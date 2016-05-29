@@ -11,6 +11,7 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.api.Customer.CustomerBuilder;
+import uk.co.mruoc.api.ErrorMessage;
 import uk.co.mruoc.client.CustomerClient;
 import uk.co.mruoc.client.CustomerResponse;
 
@@ -106,6 +107,12 @@ public class CustomerMaintenance {
         String headerValue = customerResponse.getHeader(headerName);
         assertThat(headerValue).isEqualTo(expectedHeaderValue);
     }
+
+    @Then("^the service returns error message \"([^\"]*)\"$")
+    public void the_service_returns_error_message(String expectedMessage) throws Throwable {
+        assertThat(customerResponse.getErrorMessage()).isEqualTo(expectedMessage);
+    }
+
 
     private void assertMatchesReturnedCustomers(List<Customer> expectedCustomers) {
         List<Customer> customers = customerResponse.getCustomers();

@@ -5,6 +5,8 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.api.ErrorMessage;
+import uk.co.mruoc.exception.CustomerAlreadyExistsException;
 import uk.co.mruoc.facade.CustomerFacade;
 
 import javax.ws.rs.*;
@@ -53,12 +55,18 @@ public class CustomerResource {
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
-        facade.create(customer);
-        Customer newCustomer = facade.read(customer.getAccountNumber());
-        URI uri = info.getBaseUriBuilder().path("ws/v1/customers/" + newCustomer.getAccountNumber()).build();
-        return Response.created(uri)
-                .entity(newCustomer)
-                .build();
+        try {
+            facade.create(customer);
+            Customer newCustomer = facade.read(customer.getAccountNumber());
+            URI uri = info.getBaseUriBuilder().path("ws/v1/customers/" + newCustomer.getAccountNumber()).build();
+            return Response.created(uri)
+                    .entity(newCustomer)
+                    .build();
+        } catch (CustomerAlreadyExistsException e) {
+            return Response.status(409)
+                    .entity(new ErrorMessage(e.getMessage()))
+                    .build();
+        }
     }
 
     @PUT

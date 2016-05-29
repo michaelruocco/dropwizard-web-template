@@ -29,6 +29,9 @@ public interface CustomerDao {
     @SqlUpdate("delete from customer where accountNumber = :accountNumber")
     void delete(@Bind("accountNumber") String accountNumber);
 
+    @SqlQuery("select count(*) from customer where accountNumber = :accountNumber")
+    int count(@Bind("accountNumber") String accountNumber);
+
     void close();
 
 }

@@ -55,3 +55,14 @@ Feature: Customer Maintenance
       | 000011 | Laura     | Noble   | 88888   |
     When the customer "000011" is deleted
     Then the service returns a response code 204
+
+  Scenario: Attempt to create customer that already exists
+    Given the following customers exist
+      | id     | firstName | surname | balance |
+      | 000009 | Dean      | Heatlie | 33333   |
+    And we have a new customer to create with the following data
+      | id     | firstName | surname | balance |
+      | 000009 | Dean      | Heatlie | 33333   |
+    When the customer data is posted
+    Then the service returns a response code 409
+    And the service returns error message "customer 000009 already exists"
