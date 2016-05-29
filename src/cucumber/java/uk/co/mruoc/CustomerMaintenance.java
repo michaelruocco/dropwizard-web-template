@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomerMaintenance {
 
-    private static final String CONFIG_PATH = "config/aat-web-template.yml";
+    private static final String CONFIG_PATH = "config/local-web-template.yml";
 
     private final CustomerClient client = new CustomerClient();
     private final CustomerConverter customerConverter = new CustomerConverter();

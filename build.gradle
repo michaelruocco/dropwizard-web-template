@@ -64,7 +64,7 @@ dependencies {
 }
 
 def getConfigPath() {
-    'config/aat-web-template.yml'
+    'config/local-web-template.yml'
 }
 
 def getDatabaseConfig() {
