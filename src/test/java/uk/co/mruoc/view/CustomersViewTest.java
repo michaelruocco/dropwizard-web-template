@@ -12,12 +12,10 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class CustomersViewTest {
 
-    private static final String CONTEXT_PATH = "/web-template";
-
     private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
     private final MockUriInfoBuilder uriInfoBuilder = new MockUriInfoBuilder();
     private final List<Customer> customers = customerBuilder.buildCustomerList();
-    private final UriInfo uriInfo = uriInfoBuilder.build(CONTEXT_PATH);
+    private final UriInfo uriInfo = uriInfoBuilder.build();
 
     private final CustomersView view = new CustomersView(uriInfo, customers);
 
@@ -33,7 +31,7 @@ public class CustomersViewTest {
 
     @Test
     public void shouldReturnContextPath() {
-        assertThat(view.getContextPath()).isEqualTo(CONTEXT_PATH);
+        assertThat(view.getContextPath()).isEqualTo(uriInfoBuilder.getContextPath());
     }
 
 }

@@ -6,10 +6,6 @@ import uk.co.mruoc.TestCustomerBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomerView;
-import uk.co.mruoc.view.CustomersView;
-
-import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.BDDMockito.given;

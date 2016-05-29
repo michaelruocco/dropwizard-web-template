@@ -20,7 +20,7 @@ public class DeleteCustomerViewResource {
     }
 
     @GET
-    public View getCustomer(@QueryParam("accountNumber") String accountNumber, @Context UriInfo info) {
+    public CustomersView deleteCustomer(@QueryParam("accountNumber") String accountNumber, @Context UriInfo info) {
         customerFacade.delete(accountNumber);
         return new CustomersView(info, customerFacade.read());
     }

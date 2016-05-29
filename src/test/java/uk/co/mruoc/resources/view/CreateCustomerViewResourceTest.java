@@ -12,6 +12,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
@@ -22,13 +23,11 @@ import static org.mockito.Mockito.*;
 
 public class CreateCustomerViewResourceTest {
 
-    private static final String CONTEXT_PATH = "/web-template";
-
     private final MockUriInfoBuilder uriInfoBuilder = new MockUriInfoBuilder();
     private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
     private final CustomerFacade facade = mock(CustomerFacade.class);
     private final CreateCustomerViewResource resource = new CreateCustomerViewResource(facade);
-    private final UriInfo uriInfo = uriInfoBuilder.build(CONTEXT_PATH);
+    private final UriInfo uriInfo = uriInfoBuilder.build();
 
     @Test
     public void shouldShowCreateCustomerView() {
@@ -39,14 +38,14 @@ public class CreateCustomerViewResourceTest {
     public void shouldCreateCustomer() {
         Customer customer = customerBuilder.buildCustomer1();
         MultivaluedMap<String, String> form = toForm(customer);
-        List<Customer> customers = Arrays.asList(customer);
+        List<Customer> customers = Collections.singletonList(customer);
         given(facade.read()).willReturn(customers);
 
         CustomersView view = (CustomersView) resource.createCustomer(form, uriInfo);
 
         verify(facade).create(any(Customer.class));
         assertThat(view.getCustomers()).isEqualTo(customers);
-        assertThat(view.getContextPath()).isEqualTo(CONTEXT_PATH);
+        assertThat(view.getContextPath()).isEqualTo(uriInfoBuilder.getContextPath());
     }
 
     @Test
