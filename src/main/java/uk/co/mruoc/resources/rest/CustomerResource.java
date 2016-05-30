@@ -58,7 +58,7 @@ public class CustomerResource {
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
-        if (facade.exists(customer))
+        if (facade.exists(customer.getAccountNumber()))
             return Response.status(409).entity(toError(errorMessageBuilder.buildAlreadyExists(customer))).build();
 
         facade.create(customer);
@@ -72,7 +72,7 @@ public class CustomerResource {
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCustomer(@ApiParam Customer customer) {
-        if (!facade.exists(customer))
+        if (!facade.exists(customer.getAccountNumber()))
             return Response.status(404).entity(toError(errorMessageBuilder.buildNotFound(customer))).build();
 
         facade.update(customer);

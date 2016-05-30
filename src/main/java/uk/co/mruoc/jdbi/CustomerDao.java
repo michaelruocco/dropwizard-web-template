@@ -32,10 +32,6 @@ public abstract class CustomerDao {
     @SqlQuery("select count(*) from customer where accountNumber = :accountNumber")
     abstract int count(@Bind("accountNumber") String accountNumber);
 
-    public boolean exists(Customer customer) {
-        return exists(customer.getAccountNumber());
-    }
-
     public boolean exists(String accountNumber) {
         return count(accountNumber) > 0;
     }

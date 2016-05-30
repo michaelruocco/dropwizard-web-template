@@ -51,11 +51,11 @@ public class CreateCustomerViewResourceTest {
     public void shouldShowErrorIfCreateCustomerFails() {
         Customer customer = customerBuilder.buildCustomer1();
         MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        doThrow(new CustomerAlreadyExistsException("123456")).when(facade).create(any(Customer.class));
+        given(facade.exists(customer.getAccountNumber())).willReturn(true);
 
         CreateCustomerView view = (CreateCustomerView) resource.createCustomer(form, uriInfo);
 
-        assertThat(view.getError()).isEqualTo("customer 123456 already exists");
+        assertThat(view.getError()).isEqualTo("customer 111111 already exists");
     }
 
 }

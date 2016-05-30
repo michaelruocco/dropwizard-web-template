@@ -40,10 +40,6 @@ public class CustomerFacade {
         deleteService.delete(accountNumber);
     }
 
-    public boolean exists(Customer customer) {
-        return exists(customer.getAccountNumber());
-    }
-
     public boolean exists(String accountNumber) {
         return readService.exists(accountNumber);
     }

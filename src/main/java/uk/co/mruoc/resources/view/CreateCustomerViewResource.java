@@ -1,8 +1,8 @@
 package uk.co.mruoc.resources.view;
 
 import io.dropwizard.views.View;
+import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.exception.CustomerAlreadyExistsException;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
@@ -20,6 +20,7 @@ import static javax.ws.rs.core.MediaType.*;
 @Path("/createCustomer/")
 public class CreateCustomerViewResource {
 
+    private final CustomerErrorMessageBuilder errorMessageBuilder = new CustomerErrorMessageBuilder();
     private final FormToCustomerConverter converter = new FormToCustomerConverter();
     private final CustomerFacade customerFacade;
 
@@ -35,13 +36,12 @@ public class CreateCustomerViewResource {
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
     public View createCustomer(MultivaluedMap<String, String> form, @Context UriInfo info) {
-        try {
-            Customer customer = converter.toCustomer(form);
-            customerFacade.create(customer);
-            return new CustomersView(info, customerFacade.read());
-        } catch (CustomerAlreadyExistsException e) {
-            return new CreateCustomerView(e.getMessage());
-        }
+        Customer customer = converter.toCustomer(form);
+        if (customerFacade.exists(customer.getAccountNumber()))
+            return new CreateCustomerView(errorMessageBuilder.buildAlreadyExists(customer));
+
+        customerFacade.create(customer);
+        return new CustomersView(info, customerFacade.read());
     }
 
 }

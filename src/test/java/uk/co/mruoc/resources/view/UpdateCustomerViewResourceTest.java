@@ -44,7 +44,9 @@ public class UpdateCustomerViewResourceTest {
     @Test
     public void shouldUpdateCustomer() {
         List<Customer> customers = customerBuilder.buildCustomerList();
-        MultivaluedMap<String, String> form = formConverter.toForm(customers.get(0));
+        Customer customer = customers.get(0);
+        MultivaluedMap<String, String> form = formConverter.toForm(customer);
+        given(facade.exists(customer.getAccountNumber())).willReturn(true);
         given(facade.read()).willReturn(customers);
 
         CustomersView view = (CustomersView) resource.updateCustomer(form, uriInfo);
@@ -58,12 +60,11 @@ public class UpdateCustomerViewResourceTest {
     public void shouldShowErrorIfUpdateCustomerFails() {
         Customer customer = customerBuilder.buildCustomer1();
         MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        String error = "an error occurred";
-        doThrow(new RuntimeException(error)).when(facade).update(any(Customer.class));
+        given(facade.exists(customer.getAccountNumber())).willReturn(false);
 
         UpdateCustomerView view = (UpdateCustomerView) resource.updateCustomer(form, uriInfo);
 
-        assertThat(view.getError()).isEqualTo(error);
+        assertThat(view.getError()).isEqualTo("customer 111111 not found");
     }
 
 }

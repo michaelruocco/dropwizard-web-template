@@ -1,6 +1,7 @@
 package uk.co.mruoc.resources.view;
 
 import io.dropwizard.views.View;
+import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
@@ -17,6 +18,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 @Path("/updateCustomer/")
 public class UpdateCustomerViewResource {
 
+    private final CustomerErrorMessageBuilder errorMessageBuilder = new CustomerErrorMessageBuilder();
     private final FormToCustomerConverter converter = new FormToCustomerConverter();
     private final CustomerFacade customerFacade;
 
@@ -34,12 +36,11 @@ public class UpdateCustomerViewResource {
     @Consumes(APPLICATION_FORM_URLENCODED)
     public View updateCustomer(MultivaluedMap<String, String> form, @Context UriInfo info) {
         Customer customer = converter.toCustomer(form);
-        try {
-            customerFacade.update(customer);
-            return new CustomersView(info, customerFacade.read());
-        } catch (Exception e) {
-            return new UpdateCustomerView(customer, e.getMessage());
-        }
+        if (!customerFacade.exists(customer.getAccountNumber()))
+            return new UpdateCustomerView(customer, errorMessageBuilder.buildNotFound(customer));
+
+        customerFacade.update(customer);
+        return new CustomersView(info, customerFacade.read());
     }
 
 }
