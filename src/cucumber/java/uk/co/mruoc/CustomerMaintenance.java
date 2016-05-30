@@ -6,16 +6,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import gherkin.formatter.model.DataTableRow;
-import io.dropwizard.testing.ResourceHelpers;
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.ClassRule;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.api.Customer.CustomerBuilder;
-import uk.co.mruoc.api.ErrorMessage;
 import uk.co.mruoc.client.CustomerClient;
 import uk.co.mruoc.client.CustomerResponse;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

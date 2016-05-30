@@ -1,7 +1,6 @@
 package uk.co.mruoc.service;
 
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.exception.CustomerNotFoundException;
 import uk.co.mruoc.jdbi.CustomerDao;
 
 import java.util.List;

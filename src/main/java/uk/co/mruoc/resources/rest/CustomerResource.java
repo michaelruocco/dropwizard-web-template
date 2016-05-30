@@ -7,8 +7,6 @@ import com.wordnik.swagger.annotations.ApiParam;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.api.ErrorMessage;
-import uk.co.mruoc.exception.CustomerAlreadyExistsException;
-import uk.co.mruoc.exception.CustomerNotFoundException;
 import uk.co.mruoc.facade.CustomerFacade;
 
 import javax.ws.rs.*;

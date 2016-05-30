@@ -1,6 +1,5 @@
 package uk.co.mruoc.service;
 
-import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.jdbi.CustomerDao;
 

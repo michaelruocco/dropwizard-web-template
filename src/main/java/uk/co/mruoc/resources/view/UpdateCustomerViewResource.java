@@ -4,7 +4,6 @@ import io.dropwizard.views.View;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
-import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
 import uk.co.mruoc.view.UpdateCustomerView;
 

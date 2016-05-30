@@ -1,6 +1,5 @@
 package uk.co.mruoc.resources.view;
 
-import io.dropwizard.views.View;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomersView;
 

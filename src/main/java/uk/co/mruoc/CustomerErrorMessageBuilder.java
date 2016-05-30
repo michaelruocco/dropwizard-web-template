@@ -8,7 +8,7 @@ public class CustomerErrorMessageBuilder {
         return buildAlreadyExists(customer.getAccountNumber());
     }
 
-    public String buildAlreadyExists(String accountNumber) {
+    private String buildAlreadyExists(String accountNumber) {
         return String.format("customer %s already exists", accountNumber);
     }
 

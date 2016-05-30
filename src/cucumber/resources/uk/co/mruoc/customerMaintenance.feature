@@ -80,4 +80,4 @@ Feature: Customer Maintenance
     Given customer "999999" does not exist
     When a get request is made for customer "999999"
     Then the service returns a response code 404
-    And the service returns error message "customer id 999999 does not exist"
+    And the service returns error message "customer 999999 not found"

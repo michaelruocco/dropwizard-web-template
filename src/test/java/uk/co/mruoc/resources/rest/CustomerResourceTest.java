@@ -10,13 +10,11 @@ import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.client.CustomerClient;
 import uk.co.mruoc.client.CustomerResponse;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static uk.co.mruoc.TestConfig.*;
-import static uk.co.mruoc.api.Customer.*;
 
 public class CustomerResourceTest {
 
