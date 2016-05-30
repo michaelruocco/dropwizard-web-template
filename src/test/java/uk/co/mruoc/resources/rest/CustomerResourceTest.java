@@ -52,16 +52,6 @@ public class CustomerResourceTest {
     }
 
     @Test
-    public void shouldReturnErrorIfCustomerAlreadyExists() {
-        Customer customer = customerBuilder.buildCustomer1();
-
-        CustomerResponse response = client.createCustomer(customer);
-
-        assertThat(response.getStatusCode()).isEqualTo(409);
-        assertThat(response.getErrorMessage()).isEqualTo("customer 111111 already exists");
-    }
-
-    @Test
     public void shouldGetCustomer() {
         Customer customer = customerBuilder.buildCustomer1();
 
@@ -101,6 +91,36 @@ public class CustomerResourceTest {
         CustomerResponse response = client.deleteCustomer(customer.getAccountNumber());
 
         assertThat(response.getStatusCode()).isEqualTo(204);
+    }
+
+    @Test
+    public void getShouldReturnErrorIfCustomerNotFound() {
+        Customer customer = customerBuilder.buildNewCustomer();
+
+        CustomerResponse response = client.getCustomer(customer.getAccountNumber());
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getErrorMessage()).isEqualTo("customer 333333 not found");
+    }
+
+    @Test
+    public void updateShouldReturnErrorIfCustomerNotFound() {
+        Customer customer = customerBuilder.buildNewCustomer();
+
+        CustomerResponse response = client.updateCustomer(customer);
+
+        assertThat(response.getStatusCode()).isEqualTo(404);
+        assertThat(response.getErrorMessage()).isEqualTo("customer 333333 not found");
+    }
+
+    @Test
+    public void shouldReturnErrorIfCustomerAlreadyExists() {
+        Customer customer = customerBuilder.buildCustomer1();
+
+        CustomerResponse response = client.createCustomer(customer);
+
+        assertThat(response.getStatusCode()).isEqualTo(409);
+        assertThat(response.getErrorMessage()).isEqualTo("customer 111111 already exists");
     }
 
     private String buildNewCustomerUrl(Customer customer) {

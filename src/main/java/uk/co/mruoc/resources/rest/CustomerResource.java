@@ -36,10 +36,11 @@ public class CustomerResource {
     @ApiOperation(value = "Get customer")
     @Timed
     public Response getCustomer(@PathParam("accountNumber") String accountNumber) {
+        if (!facade.exists(accountNumber))
+            return buildNotFoundResponse(accountNumber);
+
         Customer customer = facade.read(accountNumber);
-        return Response.ok()
-                .entity(customer)
-                .build();
+        return Response.ok().entity(customer).build();
     }
 
     @GET
@@ -47,10 +48,7 @@ public class CustomerResource {
     @Timed
     public Response getCustomers() {
         List<Customer> customers = facade.read();
-        return Response.ok()
-                .entity(customers)
-                .header("X-Total-Count", customers.size())
-                .build();
+        return Response.ok().entity(customers).header("X-Total-Count", customers.size()).build();
     }
 
     @POST
@@ -72,11 +70,12 @@ public class CustomerResource {
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCustomer(@ApiParam Customer customer) {
-        if (!facade.exists(customer.getAccountNumber()))
-            return Response.status(404).entity(toError(errorMessageBuilder.buildNotFound(customer))).build();
+        String accountNumber = customer.getAccountNumber();
+        if (!facade.exists(accountNumber))
+            return buildNotFoundResponse(accountNumber);
 
         facade.update(customer);
-        Customer updatedCustomer = facade.read(customer.getAccountNumber());
+        Customer updatedCustomer = facade.read(accountNumber);
         return Response.ok().entity(updatedCustomer).build();
     }
 
@@ -95,6 +94,10 @@ public class CustomerResource {
 
     private ErrorMessage toError(String message) {
         return new ErrorMessage(message);
+    }
+
+    private Response buildNotFoundResponse(String accountNumber) {
+        return Response.status(404).entity(toError(errorMessageBuilder.buildNotFound(accountNumber))).build();
     }
 
 }

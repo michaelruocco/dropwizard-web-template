@@ -75,3 +75,9 @@ Feature: Customer Maintenance
     When the customer data is updated
     Then the service returns a response code 404
     And the service returns error message "customer 000010 not found"
+
+  Scenario: Get single customer that does not exist
+    Given customer "999999" does not exist
+    When a get request is made for customer "999999"
+    Then the service returns a response code 404
+    And the service returns error message "customer id 999999 does not exist"
