@@ -8,6 +8,7 @@
         <#include "includes/navBar.ftl"/>
         <h2>Update Customer</h2>
         <form action="updateCustomer" method="post" class="form-horizontal" role="form">
+            <input type="hidden" id="accountNumber" name="accountNumber" value="${customer.accountNumber}"/>
             <#include "includes/customerForm.ftl"/>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
