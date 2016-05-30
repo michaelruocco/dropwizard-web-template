@@ -66,3 +66,12 @@ Feature: Customer Maintenance
     When the customer data is posted
     Then the service returns a response code 409
     And the service returns error message "customer 000009 already exists"
+
+  Scenario: Update customer that does not exist
+    Given customer "000010" does not exist
+    And the customer needs to be updated to
+      | id     | firstName | surname  | balance |
+      | 000010 | Updated   | Customer | 77777   |
+    When the customer data is updated
+    Then the service returns a response code 404
+    And the service returns error message "customer 000010 not found"

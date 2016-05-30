@@ -4,9 +4,11 @@ import com.codahale.metrics.annotation.Timed;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.api.ErrorMessage;
 import uk.co.mruoc.exception.CustomerAlreadyExistsException;
+import uk.co.mruoc.exception.CustomerNotFoundException;
 import uk.co.mruoc.facade.CustomerFacade;
 
 import javax.ws.rs.*;
@@ -22,6 +24,7 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
 
+    private final CustomerErrorMessageBuilder errorMessageBuilder = new CustomerErrorMessageBuilder();
     private final CustomerFacade facade;
 
     public CustomerResource(CustomerFacade facade) {
@@ -55,18 +58,13 @@ public class CustomerResource {
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
-        try {
-            facade.create(customer);
-            Customer newCustomer = facade.read(customer.getAccountNumber());
-            URI uri = info.getBaseUriBuilder().path("ws/v1/customers/" + newCustomer.getAccountNumber()).build();
-            return Response.created(uri)
-                    .entity(newCustomer)
-                    .build();
-        } catch (CustomerAlreadyExistsException e) {
-            return Response.status(409)
-                    .entity(new ErrorMessage(e.getMessage()))
-                    .build();
-        }
+        if (facade.exists(customer))
+            return Response.status(409).entity(toError(errorMessageBuilder.buildAlreadyExists(customer))).build();
+
+        facade.create(customer);
+        Customer newCustomer = facade.read(customer.getAccountNumber());
+        URI uri = getNewCustomerUri(newCustomer, info);
+        return Response.created(uri).entity(newCustomer).build();
     }
 
     @PUT
@@ -74,11 +72,12 @@ public class CustomerResource {
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateCustomer(@ApiParam Customer customer) {
+        if (!facade.exists(customer))
+            return Response.status(404).entity(toError(errorMessageBuilder.buildNotFound(customer))).build();
+
         facade.update(customer);
         Customer updatedCustomer = facade.read(customer.getAccountNumber());
-        return Response.ok()
-                .entity(updatedCustomer)
-                .build();
+        return Response.ok().entity(updatedCustomer).build();
     }
 
     @DELETE
@@ -88,6 +87,14 @@ public class CustomerResource {
     public Response deleteCustomer(@PathParam("accountNumber") String accountNumber) {
         facade.delete(accountNumber);
         return Response.noContent().build();
+    }
+
+    private URI getNewCustomerUri(Customer customer, UriInfo info) {
+        return info.getBaseUriBuilder().path("ws/v1/customers/" + customer.getAccountNumber()).build();
+    }
+
+    private ErrorMessage toError(String message) {
+        return new ErrorMessage(message);
     }
 
 }

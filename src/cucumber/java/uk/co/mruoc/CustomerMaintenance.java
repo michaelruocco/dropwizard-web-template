@@ -64,6 +64,13 @@ public class CustomerMaintenance {
         this.updateCustomer = inputCustomers.get(0);
     }
 
+    @Given("^customer \"([^\"]*)\" does not exist$")
+    public void customer_does_not_exist(String accountNumber) throws Throwable {
+        CustomerResponse response = client.getCustomer(accountNumber);
+        if (response.getStatusCode() == 200)
+            client.deleteCustomer(accountNumber);
+    }
+
     @When("^a get request is made for customer \"([^\"]*)\"$")
     public void a_get_request_is_made_for_customer(String id) throws Throwable {
         customerResponse = client.getCustomer(id);
@@ -112,7 +119,6 @@ public class CustomerMaintenance {
     public void the_service_returns_error_message(String expectedMessage) throws Throwable {
         assertThat(customerResponse.getErrorMessage()).isEqualTo(expectedMessage);
     }
-
 
     private void assertMatchesReturnedCustomers(List<Customer> expectedCustomers) {
         List<Customer> customers = customerResponse.getCustomers();

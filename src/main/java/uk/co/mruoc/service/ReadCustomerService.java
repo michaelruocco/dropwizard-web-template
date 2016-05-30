@@ -17,6 +17,10 @@ public class ReadCustomerService {
         return customerDao.read(accountNumber);
     }
 
+    public boolean exists(String accountNumber) {
+        return customerDao.exists(accountNumber);
+    }
+
     public List<Customer> read() {
         return customerDao.read();
     }
