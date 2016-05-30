@@ -82,9 +82,11 @@ embeddedMysql {
 
 flyway {
     def databaseConfig = getDatabaseConfig()
+
     user = databaseConfig.user
     password = databaseConfig.password
     url = databaseConfig.url
+    driver = databaseConfig.driverClass
 }
 
 task setupMysql {
