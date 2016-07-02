@@ -1,12 +1,10 @@
 package uk.co.mruoc.resources.view;
 
-import io.dropwizard.views.View;
 import org.junit.Test;
 import uk.co.mruoc.MockUriInfoBuilder;
 import uk.co.mruoc.TestCustomerBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
-import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
 import uk.co.mruoc.view.UpdateCustomerView;
 
@@ -17,7 +15,6 @@ import java.util.List;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 

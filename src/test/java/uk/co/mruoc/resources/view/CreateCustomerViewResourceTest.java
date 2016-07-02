@@ -3,7 +3,6 @@ package uk.co.mruoc.resources.view;
 import org.junit.Test;
 import uk.co.mruoc.*;
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.exception.CustomerAlreadyExistsException;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;

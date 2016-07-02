@@ -7,6 +7,7 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
+import uk.co.mruoc.exception.ClientException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ class Client {
         try {
             return Response.fromApacheResponse(client.execute(request));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ClientException(e);
         } finally {
             request.releaseConnection();
         }

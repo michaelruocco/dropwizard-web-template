@@ -19,7 +19,7 @@ public class MockUriInfoBuilder {
             given(uriInfo.getBaseUri()).willReturn(baseUri);
             return uriInfo;
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new MockException(e);
         }
     }
 

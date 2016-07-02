@@ -5,19 +5,13 @@ import uk.co.mruoc.MockUriInfoBuilder;
 import uk.co.mruoc.TestCustomerBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
-import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
-import java.util.Arrays;
 import java.util.List;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class DeleteCustomerViewResourceTest {
