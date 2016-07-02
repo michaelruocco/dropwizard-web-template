@@ -20,19 +20,19 @@ class Response {
         this.headers = headers;
     }
 
-    String getBody() {
+    protected String getBody() {
         return body;
     }
 
-    int getStatusCode() {
+    protected int getStatusCode() {
         return statusCode;
     }
 
-    String getHeader(String key) {
+    protected String getHeader(String key) {
         return headers.get(key);
     }
 
-    static Response fromApacheResponse(HttpResponse response) throws IOException {
+    protected static Response fromApacheResponse(HttpResponse response) throws IOException {
         int statusCode = response.getStatusLine().getStatusCode();
         String body = extractBody(response);
         Map<String, String> headers = extractHeaders(response);

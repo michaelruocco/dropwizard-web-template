@@ -127,7 +127,7 @@ public class CustomerMaintenance {
 
     private static class CustomerConverter {
 
-        List<Customer> toCustomers(DataTable table) {
+        private List<Customer> toCustomers(DataTable table) {
             List<Customer> customers = new ArrayList<>();
             List<DataTableRow> rows = table.getGherkinRows();
             for (int r = 1; r < rows.size(); r++) {

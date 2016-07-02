@@ -24,7 +24,7 @@ class Client {
 
     private HttpClient client = HttpClientBuilder.create().build();
 
-    Response execute(HttpRequestBase request) {
+    protected Response execute(HttpRequestBase request) {
         try {
             return Response.fromApacheResponse(client.execute(request));
         } catch (IOException e) {
@@ -34,21 +34,21 @@ class Client {
         }
     }
 
-    HttpGet createGet(String endpoint) {
+    protected HttpGet createGet(String endpoint) {
         return createGet(endpoint, new HashMap<>());
     }
 
-    HttpPost createPost(String endpoint, String entity) {
+    protected HttpPost createPost(String endpoint, String entity) {
         Map<String, String> headers = new HashMap<>();
         return createPost(endpoint, entity, headers);
     }
 
-    HttpPut createPut(String endpoint, String entity) {
+    protected HttpPut createPut(String endpoint, String entity) {
         Map<String, String> headers = new HashMap<>();
         return createPut(endpoint, entity, headers);
     }
 
-    HttpDelete createDelete(String endpoint) {
+    protected HttpDelete createDelete(String endpoint) {
         HttpDelete delete = new HttpDelete(endpoint);
         logInfo("creating DELETE request for " + endpoint);
         return delete;

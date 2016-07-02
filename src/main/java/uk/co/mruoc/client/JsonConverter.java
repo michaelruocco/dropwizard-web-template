@@ -22,7 +22,7 @@ class JsonConverter {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
-    String toJson(Object value) {
+    protected String toJson(Object value) {
         try {
             return mapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
@@ -30,16 +30,16 @@ class JsonConverter {
         }
     }
 
-    ErrorMessage toErrorMessage(String json) {
+    protected ErrorMessage toErrorMessage(String json) {
         return toType(json, ErrorMessage.class);
     }
 
 
-    Customer toCustomer(String json) {
+    protected Customer toCustomer(String json) {
         return toType(json, Customer.class);
     }
 
-    List<Customer> toCustomers(String json) {
+    protected List<Customer> toCustomers(String json) {
         return toCollectionType(json, customerListType);
     }
 

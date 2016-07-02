@@ -30,7 +30,7 @@ public abstract class CustomerDao {
     public abstract void delete(@Bind("accountNumber") String accountNumber);
 
     @SqlQuery("select count(*) from customer where accountNumber = :accountNumber")
-    abstract int count(@Bind("accountNumber") String accountNumber);
+    protected abstract int count(@Bind("accountNumber") String accountNumber);
 
     public boolean exists(String accountNumber) {
         return count(accountNumber) > 0;
