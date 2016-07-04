@@ -53,7 +53,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5.2'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.4.1'
+    testCompile 'org.assertj:assertj-core:3.5.1'
     testCompile 'info.cukes:cucumber-java:1.2.4'
     testCompile 'info.cukes:cucumber-junit:1.2.4'
     testCompile 'org.yaml:snakeyaml:1.17'
