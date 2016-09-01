@@ -1,9 +1,9 @@
 package uk.co.mruoc.resources.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.api.ErrorMessage;
