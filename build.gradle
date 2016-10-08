@@ -54,8 +54,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.5.2'
-    testCompile 'info.cukes:cucumber-java:1.2.4'
-    testCompile 'info.cukes:cucumber-junit:1.2.4'
+    testCompile 'info.cukes:cucumber-java:1.2.5'
+    testCompile 'info.cukes:cucumber-junit:1.2.5'
     testCompile 'org.yaml:snakeyaml:1.17'
     testCompile 'com.h2database:h2:1.4.192'
     testCompile 'commons-dbcp:commons-dbcp:1.4'
