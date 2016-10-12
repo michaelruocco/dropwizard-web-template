@@ -1,5 +1,5 @@
 server:
-  applicationContextPath: /web-template
+  applicationContextPath: /
   applicationConnectors:
   - type: http
     port: 8090

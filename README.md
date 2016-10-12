@@ -33,9 +33,9 @@ Upon running this task the script will do the following (aside from the usual co
 * Use flyway to configure the embedded MySql instance
 * Start up the application
 
-Once this is complete you will be able to view the application [here](http://localhost:8090/web-template). 
+Once this is complete you will be able to view the application [here](http://localhost:8090/). 
 This will show you the web interface that you can use to create, update and delete customers. If you want to
-use the swagger documentation to explore these endpoints you can do [here](http://localhost:8090/web-template/swagger).
+use the swagger documentation to explore these endpoints you can do [here](http://localhost:8090/swagger).
 
 You should also be aware that because the application is using an embedded MySql instance, the data that you create will
 not be persisted after the application is stopped. This is because it is intended to be a quick and easy demo that can be
