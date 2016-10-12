@@ -64,6 +64,8 @@ dependencies {
 }
 
 def getConfigPath() {
+    if (project.hasProperty("configPath"))
+        return project.property("configPath")
     'config/local-web-template.yml'
 }
 
