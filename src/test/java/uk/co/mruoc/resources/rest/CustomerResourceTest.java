@@ -122,7 +122,7 @@ public class CustomerResourceTest {
     }
 
     private String buildNewCustomerUrl(Customer customer) {
-        return "http://localhost:8090/web-template/ws/v1/customers/" + customer.getAccountNumber();
+        return "http://localhost:8090/ws/v1/customers/" + customer.getAccountNumber();
     }
 
 }
