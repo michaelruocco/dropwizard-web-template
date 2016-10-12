@@ -19,7 +19,7 @@ Feature: Customer Maintenance
     And the following customer is returned
       | accountNumber | firstName | surname | balance |
       | 000008        | Chris     | Stone   | 22222   |
-    And the response header contains "Location" with value "http://localhost:8090/web-template/ws/v1/customers/000008"
+    And the response header contains "Location" with value "http://localhost:8090/ws/v1/customers/000008"
 
   Scenario: Get all customers
     Given the following customers exist

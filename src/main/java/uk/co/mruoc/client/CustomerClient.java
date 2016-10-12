@@ -5,7 +5,7 @@ import uk.co.mruoc.api.Customer;
 
 public class CustomerClient {
 
-    private static final String CUSTOMERS_URL = "http://localhost:8090/web-template/ws/v1/customers/";
+    private static final String CUSTOMERS_URL = "http://localhost:8090/ws/v1/customers/";
 
     private final JsonConverter jsonConverter = new JsonConverter();
 
