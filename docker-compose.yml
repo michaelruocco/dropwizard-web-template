@@ -1,0 +1,22 @@
+version: '2'
+services:
+  schema:
+    image: dhoer/flyway
+    command: -url=jdbc:mysql://db -schemas=web_template -user=root -password=1234 migrate
+    volumes:
+      - ./src/main/resources/db/migration/:/flyway/sql
+    depends_on:
+      - db
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    ports:
+      - 3306:3306
+  app:
+    image: michaelruocco/web-template
+    ports:
+      - 80:80
+    depends_on:
+      - schema
