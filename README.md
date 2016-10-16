@@ -42,3 +42,30 @@ not be persisted after the application is stopped. This is because it is intende
 run with minimal effort. If you wish to persist data after the application is stopped then you will need to amend the
 database properties found in config/local-web-template.yml to point at your own mysql instance. Since Flyway does not
 create the actual database itself so you will need to create an empty database in order for flyway to work correctly.
+
+## Docker
+
+The application can also be run using docker, if you have docker-compose installed on your
+machine you can run the application using the following commands:
+
+```
+docker-compose up -d db
+```
+
+This will fire up a mysql docker container that will contain the application that the database will use.
+Once the database has started you can then run
+
+```
+docker-compose up -d schema
+```
+
+First this will fire up a docker container that will run the flyway migrations
+in order to set up the application database. Finally you can fire up the application
+itself using the command:
+
+```
+docker-compose up -d app
+```
+
+This starts the dropwizard application. Once the application has started you can view
+the application by navigating to http://<docker.container.ip>.
