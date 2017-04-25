@@ -11,18 +11,20 @@ buildscript {
     dependencies {
         classpath 'org.flywaydb:flyway-gradle-plugin:4.0'
         classpath 'org.yaml:snakeyaml:1.17'
-        classpath 'com.github.michaelruocco:embedded-mysql-plugin:2.0.0'
         classpath 'com.github.samueltbrown:gradle-cucumber-plugin:0.9'
         classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
     }
 }
 
+plugins {
+    id "com.github.michaelruocco.embedded-mysql-plugin" version "2.1.5"
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.flywaydb.flyway'
 apply plugin: 'application'
-apply plugin: 'embedded-mysql'
 apply plugin: 'com.github.samueltbrown.cucumber'
 apply plugin: 'com.wiredforcode.spawn'
 apply plugin: 'jacoco'
