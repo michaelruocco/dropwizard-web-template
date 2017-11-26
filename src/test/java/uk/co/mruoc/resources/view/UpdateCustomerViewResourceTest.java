@@ -1,13 +1,16 @@
 package uk.co.mruoc.resources.view;
 
 import org.junit.Test;
-import uk.co.mruoc.MockUriInfoBuilder;
+import uk.co.mruoc.FakeUriInfo;
 import uk.co.mruoc.TestCustomerBuilder;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.facade.Authenticator;
 import uk.co.mruoc.facade.CustomerFacade;
+import uk.co.mruoc.facade.FakeAuthenticator;
 import uk.co.mruoc.view.CustomersView;
 import uk.co.mruoc.view.UpdateCustomerView;
 
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
@@ -21,11 +24,12 @@ import static org.mockito.Mockito.verify;
 public class UpdateCustomerViewResourceTest {
 
     private final CustomerToFormConverter formConverter = new CustomerToFormConverter();
-    private final MockUriInfoBuilder uriInfoBuilder = new MockUriInfoBuilder();
     private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
     private final CustomerFacade facade = mock(CustomerFacade.class);
-    private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(facade);
-    private final UriInfo uriInfo = uriInfoBuilder.build();
+    private final HttpSession session = mock(HttpSession.class);
+    private final Authenticator authenticator = new FakeAuthenticator();
+    private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(authenticator, facade);
+    private final UriInfo uriInfo = new FakeUriInfo();
 
     @Test
     public void shouldShowUpdateCustomer() {
@@ -33,7 +37,7 @@ public class UpdateCustomerViewResourceTest {
         Customer customer = customerBuilder.buildCustomer1();
         given(facade.read(accountNumber)).willReturn(customer);
 
-        UpdateCustomerView view = resource.showUpdateCustomer(accountNumber);
+        UpdateCustomerView view = resource.showUpdateCustomer(uriInfo, session, accountNumber);
 
         assertThat(view.getCustomer()).isEqualTo(customer);
     }
@@ -46,11 +50,10 @@ public class UpdateCustomerViewResourceTest {
         given(facade.exists(customer.getAccountNumber())).willReturn(true);
         given(facade.read()).willReturn(customers);
 
-        CustomersView view = (CustomersView) resource.updateCustomer(form, uriInfo);
+        CustomersView view = (CustomersView) resource.updateCustomer(uriInfo, session, form);
 
         verify(facade).update(any(Customer.class));
         assertThat(view.getCustomers()).isEqualTo(customers);
-        assertThat(view.getContextPath()).isEqualTo(uriInfoBuilder.getContextPath());
     }
 
     @Test
@@ -59,7 +62,7 @@ public class UpdateCustomerViewResourceTest {
         MultivaluedMap<String, String> form = formConverter.toForm(customer);
         given(facade.exists(customer.getAccountNumber())).willReturn(false);
 
-        UpdateCustomerView view = (UpdateCustomerView) resource.updateCustomer(form, uriInfo);
+        UpdateCustomerView view = (UpdateCustomerView) resource.updateCustomer(uriInfo, session, form);
 
         assertThat(view.getError()).isEqualTo("customer 111111 not found");
     }

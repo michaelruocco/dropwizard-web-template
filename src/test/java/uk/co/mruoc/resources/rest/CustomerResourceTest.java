@@ -92,7 +92,7 @@ public class CustomerResourceTest {
     }
 
     @Test
-    public void getShouldReturnErrorIfCustomerNotFound() {
+    public void  getShouldReturnErrorIfCustomerNotFound() {
         Customer customer = customerBuilder.buildNewCustomer();
 
         CustomerResponse response = client.getCustomer(customer.getAccountNumber());

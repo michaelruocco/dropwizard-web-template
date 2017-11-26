@@ -1,7 +1,6 @@
 package uk.co.mruoc.resources.view;
 
 import org.junit.Test;
-import uk.co.mruoc.MockUriInfoBuilder;
 import uk.co.mruoc.TestCustomerBuilder;
 import uk.co.mruoc.api.Customer;
 import uk.co.mruoc.facade.CustomerFacade;
@@ -13,7 +12,6 @@ import static org.mockito.Mockito.mock;
 
 public class CustomerViewResourceTest {
 
-    private final MockUriInfoBuilder uriInfoBuilder = new MockUriInfoBuilder();
     private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
     private final CustomerFacade facade = mock(CustomerFacade.class);
     private final CustomerViewResource resource = new CustomerViewResource(facade);

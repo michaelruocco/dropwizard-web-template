@@ -1,18 +1,18 @@
 package uk.co.mruoc.view;
 
-import io.dropwizard.views.View;
 import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.resources.view.SessionUser;
 
-public class CreateCustomerView extends View {
+public class CreateCustomerView extends DefaultLoginableView {
 
     private final String error;
 
-    public CreateCustomerView() {
-        this("");
+    public CreateCustomerView(SessionUser sessionUser) {
+        this(sessionUser,"");
     }
 
-    public CreateCustomerView(String error) {
-        super("createCustomer.ftl");
+    public CreateCustomerView(SessionUser sessionUser, String error) {
+        super("createCustomer.ftl", sessionUser);
         this.error = error;
     }
 

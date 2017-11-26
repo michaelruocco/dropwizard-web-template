@@ -1,11 +1,11 @@
 package uk.co.mruoc.view;
 
-import io.dropwizard.views.View;
+import uk.co.mruoc.resources.view.SessionUser;
 
-public class IndexView extends View {
+public class IndexView extends DefaultLoginableView {
 
-    public IndexView() {
-        super("index.ftl");
+    public IndexView(SessionUser sessionUser) {
+        super("index.ftl", sessionUser);
     }
 
     public String getName() {

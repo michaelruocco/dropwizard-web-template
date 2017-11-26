@@ -7,12 +7,14 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.skife.jdbi.v2.DBI;
 import uk.co.deloittedigital.dropwizard.hikari.HikariBundle;
-import uk.co.mruoc.facade.CustomerFacade;
+import uk.co.mruoc.facade.*;
 import uk.co.mruoc.facade.CustomerFacade.CustomerFacadeBuilder;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.rest.CustomerResource;
+import uk.co.mruoc.resources.rest.OAuth2CallbackResource;
 import uk.co.mruoc.resources.view.*;
 import uk.co.mruoc.service.CreateCustomerService;
 import uk.co.mruoc.service.DeleteCustomerService;
@@ -41,14 +43,20 @@ public class Application extends io.dropwizard.Application<Config> {
 
     @Override
     public void run(Config config, Environment env) {
-        env.jersey().register(new IndexViewResource());
+        final AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
+        final Authenticator authenticator = authenticatorFactory.build( );
+        env.jersey().register(new IndexViewResource(authenticator));
+        env.jersey().register(new OAuth2CallbackResource(authenticator));
+        env.jersey().register(new LogoutViewResource(authenticator));
+        env.servlets().setSessionHandler(new SessionHandler());
+
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(env, config.getDataSourceFactory(), "database");
 
-        setUpCustomerResources(env, dbi);
+        setUpCustomerResources(env, dbi, authenticator);
     }
 
-    private void setUpCustomerResources(Environment env, DBI dbi) {
+    private void setUpCustomerResources(Environment env, DBI dbi, Authenticator authenticator) {
         final CustomerDao customerDao = dbi.onDemand(CustomerDao.class);
         final CustomerFacade customerFacade = new CustomerFacadeBuilder()
                 .setCreateService(new CreateCustomerService(customerDao))
@@ -57,11 +65,11 @@ public class Application extends io.dropwizard.Application<Config> {
                 .setDeleteService(new DeleteCustomerService(customerDao))
                 .build();
 
-        env.jersey().register(new CustomersViewResource(customerFacade));
+        env.jersey().register(new CustomersViewResource(authenticator, customerFacade));
         env.jersey().register(new CustomerViewResource(customerFacade));
-        env.jersey().register(new CreateCustomerViewResource(customerFacade));
-        env.jersey().register(new UpdateCustomerViewResource(customerFacade));
-        env.jersey().register(new DeleteCustomerViewResource(customerFacade));
+        env.jersey().register(new CreateCustomerViewResource(authenticator, customerFacade));
+        env.jersey().register(new UpdateCustomerViewResource(authenticator, customerFacade));
+        env.jersey().register(new DeleteCustomerViewResource(authenticator, customerFacade));
 
         env.jersey().register(new CustomerResource(customerFacade));
     }

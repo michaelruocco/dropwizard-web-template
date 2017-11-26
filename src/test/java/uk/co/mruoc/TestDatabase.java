@@ -22,6 +22,7 @@ public class TestDatabase {
     public void setUp() {
         Flyway flyway = new Flyway();
         flyway.setDataSource(getDataSource());
+        flyway.clean();
         flyway.migrate();
     }
 

@@ -1,12 +1,17 @@
 package uk.co.mruoc.view;
 
 import org.junit.Test;
+import uk.co.mruoc.resources.view.SessionUser;
+
+import javax.servlet.http.HttpSession;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 public class IndexViewTest {
 
-    private final IndexView view = new IndexView();
+    private final HttpSession session = mock(HttpSession.class);
+    private final IndexView view = new IndexView(new SessionUser("", session));
 
     @Test
     public void shouldReturnIndexViewTemplate() {

@@ -45,27 +45,39 @@ create the actual database itself so you will need to create an empty database i
 
 ## Docker
 
+The application is already built into a docker image that is host on [docker hub](https://hub.docker.com/r/michaelruocco/web-template/),
+but if you want to tweak the application or build your own container there is a Dockerfile within the
+repo, to build it you can run the following command:
+
+```
+docker build -t <your_tag> .
+```
+
 The application can also be run using docker, if you have docker-compose installed on your
 machine you can run the application using the following commands:
 
 ```
-docker-compose up -d db
+docker-compose up app
 ```
 
-This will fire up a mysql docker container that will contain the application that the database will use.
-Once the database has started you can then run
+This will fire up docker containers, a mysql database, a container that will run the flyway
+migrations against that database and a third container that will run the app. Once all the containers
+have started up you can access the application here: Once this is complete you will be able to view
+the application [here](http://localhost:8090/).
+
+The application will run with a fake implementation of single sign on by default. If you are
+running from gradle, you can enabled google SSO by providing three system properties as shown below:
 
 ```
-docker-compose up -d schema
+gradlew run -Papp.auth.type=google -Papp.google.client.id=<YOUR_CLIENT_ID> -Papp.google.client.secret=<YOUR_CLIENT_SECRET>
 ```
 
-First this will fire up a docker container that will run the flyway migrations
-in order to set up the application database. Finally you can fire up the application
-itself using the command:
+You can also enabled google SSO when running through docker compose, to do this you will need to
+create a .env file in the root of the project and set values for three environment variables as shown
+below:
 
 ```
-docker-compose up -d app
+APP_AUTH_TYPE=google
+APP_GOOGLE_CLIENT_ID=<YOUR_CLIENT_ID>
+APP_GOOGLE_CLIENT_SECRET=<YOUR_CLIENT_SECRET>
 ```
-
-This starts the dropwizard application. Once the application has started you can view
-the application by navigating to http://<docker.container.ip>.
