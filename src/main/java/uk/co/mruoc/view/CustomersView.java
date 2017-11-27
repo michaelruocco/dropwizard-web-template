@@ -1,16 +1,17 @@
 package uk.co.mruoc.view;
 
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.resources.view.SessionUser;
 
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-public class CustomersView extends DefaultLoginableView {
+public class CustomersView extends LoginableView {
 
     private List<Customer> customers;
 
-    public CustomersView(SessionUser sessionUser, List<Customer> customers) {
-        super("customers.ftl", sessionUser);
+    public CustomersView(HttpSession session, UriInfo uriInfo, List<Customer> customers) {
+        super("customers.ftl", session, uriInfo);
         this.customers = customers;
     }
 

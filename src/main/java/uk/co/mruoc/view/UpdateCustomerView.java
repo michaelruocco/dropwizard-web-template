@@ -1,19 +1,21 @@
 package uk.co.mruoc.view;
 
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.resources.view.SessionUser;
 
-public class UpdateCustomerView extends DefaultLoginableView {
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.UriInfo;
+
+public class UpdateCustomerView extends LoginableView {
 
     private final Customer customer;
     private final String error;
 
-    public UpdateCustomerView(SessionUser sessionUser, Customer customer) {
-        this(sessionUser, customer, "");
+    public UpdateCustomerView(HttpSession session, UriInfo uriInfo, Customer customer) {
+        this(session, uriInfo, customer, "");
     }
 
-    public UpdateCustomerView(SessionUser sessionUser, Customer customer, String error) {
-        super("updateCustomer.ftl", sessionUser);
+    public UpdateCustomerView(HttpSession session, UriInfo uriInfo, Customer customer, String error) {
+        super("updateCustomer.ftl", session, uriInfo);
         this.customer = customer;
         this.error = error;
     }

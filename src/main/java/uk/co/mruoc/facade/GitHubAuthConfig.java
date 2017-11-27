@@ -1,10 +1,12 @@
 package uk.co.mruoc.facade;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.ws.rs.core.UriInfo;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-public class GoogleAuthConfig implements AuthConfig {
+public class GitHubAuthConfig implements AuthConfig {
 
     @Override
     public boolean canAuth() {
@@ -18,35 +20,33 @@ public class GoogleAuthConfig implements AuthConfig {
 
     @Override
     public String getClientId() {
-        return System.getenv("GOOGLE_CLIENT_ID");
+        return System.getenv("GITHUB_CLIENT_ID");
     }
 
     @Override
     public String getClientSecret() {
-        return System.getenv("GOOGLE_CLIENT_SECRET");
+        return System.getenv("GITHUB_CLIENT_SECRET");
     }
 
     @Override
     public String getRedirectUrl(UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().path("oauth2callback/google").toTemplate();
+        return uriInfo.getBaseUriBuilder().path("oauth2callback/github").toTemplate();
     }
-
     @Override
     public String getTokenUrl() {
-        return "https://accounts.google.com/o/oauth2/token";
+        return "https://github.com/login/oauth/access_token";
     }
 
     @Override
     public String getUserInfoUrl() {
-        return "https://www.googleapis.com/oauth2/v1/userinfo";
+        return "https://api.github.com/user";
     }
 
     private String buildAuthUrl(UriInfo uriInfo) {
         StringBuilder url = new StringBuilder();
-        url.append("https://accounts.google.com/o/oauth2/auth");
-        url.append("?scope=https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email");
+        url.append("https://github.com/login/oauth/authorize");
+        url.append("?scope=user:email");
         url.append("&state=%2Fprofile");
-        url.append("&response_type=code");
         url.append("&client_id=").append(getClientId());
         url.append("&redirect_uri=").append(getRedirectUrl(uriInfo));
         return url.toString();

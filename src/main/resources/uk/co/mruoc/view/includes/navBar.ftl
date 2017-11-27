@@ -12,16 +12,16 @@
         <#if loggedIn >
             <ul class="nav navbar-nav">
                 <#if templateName == "/uk/co/mruoc/view/customers.ftl">
-                    <li class="active"><a href="customers">Customers</a></li>
+                    <li class="active"><a href="/customers">Customers</a></li>
                 <#else>
-                    <li><a href="customers">Customers</a></li>
+                    <li><a href="/customers">Customers</a></li>
                 </#if>
                 <#if templateName == "/uk/co/mruoc/view/createCustomer.ftl">
-                    <li class="active"><a href="createCustomer">Create Customer</a></li>
+                    <li class="active"><a href="/createCustomer">Create Customer</a></li>
                 <#else>
-                    <li><a href="createCustomer">Create Customer</a></li>
+                    <li><a href="/createCustomer">Create Customer</a></li>
                 </#if>
-                <li><a href="swagger">Swagger</a></li>
+                <li><a href="/swagger">Swagger</a></li>
             </ul>
         </#if>
         <ul class="nav navbar-nav navbar-right">
@@ -29,12 +29,26 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="${userInfo.pictureUrl!}" alt="${userInfo.name!}" style="width:20px; height:20px; border-radius:50%; margin:0px;"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" onclick="return false;">${userInfo.email}</a></li>
-                        <li><a href="logout">Logout</a></li>
+                        <li><a href="#" onclick="return false;">${userInfo.username}</a></li>
+                        <li><a href="/logout">Logout</a></li>
                     </ul>
                 </li>
             <#else>
-                <li><a href=${loginUrl}>Login</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <#if canAuth('google')>
+                            <li><a href=${getAuthUrl('google')}>Google</a></li>
+                        </#if>
+                        <#if canAuth('github')>
+                            <li><a href=${getAuthUrl('github')}>GitHub</a></li>
+                        </#if>
+                        <#if canAuth('fake')>
+                            <li><a href=${getAuthUrl('fake')}>Fake</a></li>
+                        </#if>
+                    </ul>
+                </li>
+
             </#if>
         </ul>
     </div>

@@ -101,14 +101,20 @@ task setupMysql {
 run {
     dependsOn setupMysql
     mainClassName = mainClassName
-    if (project.hasProperty('app.auth.type')) {
-        environment 'APP_AUTH_TYPE', project.property('app.auth.type')
+    if (project.hasProperty('fake.client.id')) {
+        environment 'FAKE_CLIENT_ID', project.property('fake.client.id')
     }
-    if (project.hasProperty('app.google.client.id')) {
-        environment 'APP_GOOGLE_CLIENT_ID', project.property('app.google.client.id')
+    if (project.hasProperty('google.client.id')) {
+        environment 'GOOGLE_CLIENT_ID', project.property('google.client.id')
     }
-    if (project.hasProperty('app.google.client.secret')) {
-        environment 'APP_GOOGLE_CLIENT_SECRET', project.property('app.google.client.secret')
+    if (project.hasProperty('google.client.secret')) {
+        environment 'GOOGLE_CLIENT_SECRET', project.property('google.client.secret')
+    }
+    if (project.hasProperty('github.client.id')) {
+        environment 'GITHUB_CLIENT_ID', project.property('github.client.id')
+    }
+    if (project.hasProperty('github.client.secret')) {
+        environment 'GITHUB_CLIENT_SECRET', project.property('github.client.secret')
     }
     args 'server', configPath
 }

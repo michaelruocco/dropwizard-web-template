@@ -24,7 +24,7 @@ gradlew acceptanceTest
 In order to run the application once you have cloned the repo you should run the following:
 
 ```
-gradlew run
+gradlew run -Pfake.client.id=fake
 ```
 
 Upon running this task the script will do the following (aside from the usual compilation etc.)
@@ -65,11 +65,33 @@ migrations against that database and a third container that will run the app. On
 have started up you can access the application here: Once this is complete you will be able to view
 the application [here](http://localhost:8090/).
 
-The application will run with a fake implementation of single sign on by default. If you are
-running from gradle, you can enabled google SSO by providing three system properties as shown below:
+## SSO
+
+The application can run with three different single sign on implementations:
+
+* Google
+* GitHub
+* Fake
+
+The first two are pretty self explanatory, the last one is an empty implementation intended
+for use when testing locally to give both speed and simplicity if you are not interesting in testing
+or building an SSO implementation itself.
+
+Which providers are enabled are all controlled by environment variables, to enabled either google or
+github sign on you can run with either of the sets of parameters shown below:
 
 ```
-gradlew run -Papp.auth.type=google -Papp.google.client.id=<YOUR_CLIENT_ID> -Papp.google.client.secret=<YOUR_CLIENT_SECRET>
+gradlew run -Pgoogle.client.id=<your_google_client_id> -Pgoogle.client.secret=<your_google_client_secret> -Pgithub.client.id=<your_github_client_id> -Pgithub.client.secret=<your_github_client_secret>
+```
+
+If you want one without the other, just provide the credentials for the provider you are interested in,
+they will only appear active in the application if the variables are provided.
+
+The fake implementation is a little simpler in that all you have to do is provide a non empty value for
+a single environment variable FAKE_CLIENT_ID. The value does not matter, but one example would be:
+
+```
+gradlew run -Pfake.client.id=fake
 ```
 
 You can also enabled google SSO when running through docker compose, to do this you will need to
@@ -77,7 +99,9 @@ create a .env file in the root of the project and set values for three environme
 below:
 
 ```
-APP_AUTH_TYPE=google
-APP_GOOGLE_CLIENT_ID=<YOUR_CLIENT_ID>
-APP_GOOGLE_CLIENT_SECRET=<YOUR_CLIENT_SECRET>
+GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
+GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
+
+GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
+GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
 ```

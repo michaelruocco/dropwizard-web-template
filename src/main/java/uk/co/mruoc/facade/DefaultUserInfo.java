@@ -3,13 +3,13 @@ package uk.co.mruoc.facade;
 public class DefaultUserInfo implements UserInfo {
 
     private final String id;
-    private final String email;
+    private final String username;
     private final String name;
     private final String pictureUrl;
 
     public DefaultUserInfo(DefaultUserInfoBuilder builder) {
         this.id = builder.id;
-        this.email = builder.email;
+        this.username = builder.username;
         this.name = builder.name;
         this.pictureUrl = builder.pictureUrl;
     }
@@ -20,8 +20,8 @@ public class DefaultUserInfo implements UserInfo {
     }
 
     @Override
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class DefaultUserInfo implements UserInfo {
     public static class DefaultUserInfoBuilder {
 
         private String id;
-        private String email;
+        private String username;
         private String name;
         private String pictureUrl;
 
@@ -46,8 +46,8 @@ public class DefaultUserInfo implements UserInfo {
             return this;
         }
 
-        public DefaultUserInfoBuilder setEmail(String email) {
-            this.email = email;
+        public DefaultUserInfoBuilder setUsername(String username) {
+            this.username = username;
             return this;
         }
 

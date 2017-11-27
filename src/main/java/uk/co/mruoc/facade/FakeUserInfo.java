@@ -8,7 +8,7 @@ public class FakeUserInfo implements UserInfo {
     }
 
     @Override
-    public String getEmail() {
+    public String getUsername() {
         return "fake.user@web.template.co.uk";
     }
 

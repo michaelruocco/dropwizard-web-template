@@ -4,9 +4,7 @@ import org.junit.Test;
 import uk.co.mruoc.FakeUriInfo;
 import uk.co.mruoc.TestCustomerBuilder;
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.facade.Authenticator;
 import uk.co.mruoc.facade.CustomerFacade;
-import uk.co.mruoc.facade.FakeAuthenticator;
 import uk.co.mruoc.view.CustomersView;
 import uk.co.mruoc.view.UpdateCustomerView;
 
@@ -27,8 +25,7 @@ public class UpdateCustomerViewResourceTest {
     private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
     private final CustomerFacade facade = mock(CustomerFacade.class);
     private final HttpSession session = mock(HttpSession.class);
-    private final Authenticator authenticator = new FakeAuthenticator();
-    private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(authenticator, facade);
+    private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(facade);
     private final UriInfo uriInfo = new FakeUriInfo();
 
     @Test

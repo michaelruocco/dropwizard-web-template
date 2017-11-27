@@ -44,19 +44,18 @@ public class Application extends io.dropwizard.Application<Config> {
     @Override
     public void run(Config config, Environment env) {
         final AuthenticatorFactory authenticatorFactory = new AuthenticatorFactory();
-        final Authenticator authenticator = authenticatorFactory.build( );
-        env.jersey().register(new IndexViewResource(authenticator));
-        env.jersey().register(new OAuth2CallbackResource(authenticator));
-        env.jersey().register(new LogoutViewResource(authenticator));
+        env.jersey().register(new IndexViewResource());
+        env.jersey().register(new OAuth2CallbackResource(authenticatorFactory));
+        env.jersey().register(new LogoutViewResource());
         env.servlets().setSessionHandler(new SessionHandler());
 
         final DBIFactory factory = new DBIFactory();
         final DBI dbi = factory.build(env, config.getDataSourceFactory(), "database");
 
-        setUpCustomerResources(env, dbi, authenticator);
+        setUpCustomerResources(env, dbi);
     }
 
-    private void setUpCustomerResources(Environment env, DBI dbi, Authenticator authenticator) {
+    private void setUpCustomerResources(Environment env, DBI dbi) {
         final CustomerDao customerDao = dbi.onDemand(CustomerDao.class);
         final CustomerFacade customerFacade = new CustomerFacadeBuilder()
                 .setCreateService(new CreateCustomerService(customerDao))
@@ -65,11 +64,11 @@ public class Application extends io.dropwizard.Application<Config> {
                 .setDeleteService(new DeleteCustomerService(customerDao))
                 .build();
 
-        env.jersey().register(new CustomersViewResource(authenticator, customerFacade));
+        env.jersey().register(new CustomersViewResource(customerFacade));
         env.jersey().register(new CustomerViewResource(customerFacade));
-        env.jersey().register(new CreateCustomerViewResource(authenticator, customerFacade));
-        env.jersey().register(new UpdateCustomerViewResource(authenticator, customerFacade));
-        env.jersey().register(new DeleteCustomerViewResource(authenticator, customerFacade));
+        env.jersey().register(new CreateCustomerViewResource(customerFacade));
+        env.jersey().register(new UpdateCustomerViewResource(customerFacade));
+        env.jersey().register(new DeleteCustomerViewResource(customerFacade));
 
         env.jersey().register(new CustomerResource(customerFacade));
     }

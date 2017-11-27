@@ -4,7 +4,6 @@ import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.facade.Authenticator;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomersView;
 import uk.co.mruoc.view.UpdateCustomerView;
@@ -18,34 +17,31 @@ import javax.ws.rs.core.UriInfo;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 
 @Path("/updateCustomer/")
-public class UpdateCustomerViewResource extends LoginableViewResource {
+public class UpdateCustomerViewResource {
 
     private final CustomerErrorMessageBuilder errorMessageBuilder = new CustomerErrorMessageBuilder();
     private final FormToCustomerConverter converter = new FormToCustomerConverter();
     private final CustomerFacade customerFacade;
 
-    public UpdateCustomerViewResource(Authenticator authenticator, CustomerFacade customerFacade) {
-        super(authenticator);
+    public UpdateCustomerViewResource(CustomerFacade customerFacade) {
         this.customerFacade = customerFacade;
     }
 
     @GET
     public UpdateCustomerView showUpdateCustomer(@Context UriInfo uriInfo, @Session HttpSession session, @QueryParam("accountNumber") String accountNumber) {
         Customer customer = customerFacade.read(accountNumber);
-        SessionUser sessionUser = createSessionUser(uriInfo, session);
-        return new UpdateCustomerView(sessionUser, customer);
+        return new UpdateCustomerView(session, uriInfo, customer);
     }
 
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
     public View updateCustomer(@Context UriInfo uriInfo, @Session HttpSession session, MultivaluedMap<String, String> form) {
         Customer customer = converter.toCustomer(form);
-        SessionUser sessionUser = createSessionUser(uriInfo, session);
         if (!customerFacade.exists(customer.getAccountNumber()))
-            return new UpdateCustomerView(sessionUser, customer, errorMessageBuilder.buildNotFound(customer));
+            return new UpdateCustomerView(session, uriInfo, customer, errorMessageBuilder.buildNotFound(customer));
 
         customerFacade.update(customer);
-        return new CustomersView(sessionUser, customerFacade.read());
+        return new CustomersView(session, uriInfo, customerFacade.read());
     }
 
 }

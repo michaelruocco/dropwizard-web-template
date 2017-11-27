@@ -3,9 +3,7 @@ package uk.co.mruoc.resources.view;
 import org.junit.Test;
 import uk.co.mruoc.*;
 import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.facade.Authenticator;
 import uk.co.mruoc.facade.CustomerFacade;
-import uk.co.mruoc.facade.FakeAuthenticator;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
 
@@ -27,8 +25,7 @@ public class CreateCustomerViewResourceTest {
     private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
     private final CustomerFacade facade = mock(CustomerFacade.class);
     private final HttpSession session = mock(HttpSession.class);
-    private final Authenticator authenticator = new FakeAuthenticator();
-    private final CreateCustomerViewResource resource = new CreateCustomerViewResource(authenticator, facade);
+    private final CreateCustomerViewResource resource = new CreateCustomerViewResource(facade);
     private final UriInfo uriInfo = new FakeUriInfo();
 
     @Test

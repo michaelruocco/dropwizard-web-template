@@ -8,16 +8,10 @@ public class SessionUser {
 
     private static final String ATTRIBUTE_NAME = "userInfo";
 
-    private final String loginUrl;
     private final HttpSession session;
 
-    public SessionUser(String loginUrl, HttpSession session) {
-        this.loginUrl = loginUrl;
+    public SessionUser(HttpSession session) {
         this.session = session;
-    }
-
-    public String getLoginUrl() {
-        return loginUrl;
     }
 
     public boolean isPresent() {
@@ -30,6 +24,10 @@ public class SessionUser {
 
     public void setInfo(UserInfo userInfo) {
         session.setAttribute(ATTRIBUTE_NAME, userInfo);
+    }
+
+    public void logout() {
+        session.removeAttribute(ATTRIBUTE_NAME);
     }
 
 }
