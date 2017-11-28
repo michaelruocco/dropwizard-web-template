@@ -1,60 +1,115 @@
 package uk.co.mruoc.resources.view;
 
+import io.dropwizard.views.View;
 import org.junit.Test;
 import uk.co.mruoc.*;
-import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.facade.CustomerFacade;
+import uk.co.mruoc.Customer;
+import uk.co.mruoc.auth.FakeUserInfo;
+import uk.co.mruoc.facade.FakeCustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
+import uk.co.mruoc.view.IndexView;
 
-import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
 
 public class CreateCustomerViewResourceTest {
 
-    private final CustomerToFormConverter formConverter = new CustomerToFormConverter();
-    private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
-    private final CustomerFacade facade = mock(CustomerFacade.class);
-    private final HttpSession session = mock(HttpSession.class);
-    private final CreateCustomerViewResource resource = new CreateCustomerViewResource(facade);
+    private final FakeCustomerFacade facade = new FakeCustomerFacade();
+    private final FakeHttpSession session = new FakeHttpSession();
     private final UriInfo uriInfo = new FakeUriInfo();
 
+    private final CreateCustomerViewResource resource = new CreateCustomerViewResource(facade);
+
     @Test
-    public void shouldShowCreateCustomerView() {
-        assertThat(resource.showCreateCustomer(uriInfo, session)).isNotNull();
+    public void showCreateCustomerShouldReturnIndexViewIfNotLoggedIn() {
+        View view = resource.showCreateCustomer(uriInfo, session);
+
+        assertThat(view).isInstanceOf(IndexView.class);
     }
 
     @Test
-    public void shouldCreateCustomer() {
-        Customer customer = customerBuilder.buildCustomer1();
-        MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        List<Customer> customers = Collections.singletonList(customer);
-        given(facade.read()).willReturn(customers);
+    public void showCreateCustomerShouldReturnCreateCustomerViewIfLoggedIn() {
+        givenUserIsLoggedIn();
 
-        CustomersView view = (CustomersView) resource.createCustomer(uriInfo, session, form);
+        View view = resource.showCreateCustomer(uriInfo, session);
 
-        verify(facade).create(any(Customer.class));
-        assertThat(view.getCustomers()).isEqualTo(customers);
+        assertThat(view).isInstanceOf(CreateCustomerView.class);
     }
 
     @Test
-    public void shouldShowErrorIfCreateCustomerFails() {
-        Customer customer = customerBuilder.buildCustomer1();
-        MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        given(facade.exists(customer.getAccountNumber())).willReturn(true);
+    public void shouldNotCreateCustomerIfNotLoggedIn() {
+        resource.createCustomer(uriInfo, session, new MultivaluedHashMap<>());
+
+        assertThat(facade.createCustomerCalled()).isFalse();
+    }
+
+    @Test
+    public void createCustomerShouldReturnIndexViewIfNotLoggedIn() {
+        View view = resource.createCustomer(uriInfo, session, new MultivaluedHashMap<>());
+
+        assertThat(view).isInstanceOf(IndexView.class);
+    }
+
+    @Test
+    public void shouldNotCreateCustomerIfLoggedInAndCustomerExists() {
+        givenUserIsLoggedIn();
+        givenCustomerExists();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(new FakeCustomer1());
+
+        resource.createCustomer(uriInfo, session, form);
+
+        assertThat(facade.createCustomerCalled()).isFalse();
+    }
+
+    @Test
+    public void shouldReturnCreateCustomerViewWithErrorMessageIfLoggedInAndCustomerExists() {
+        givenUserIsLoggedIn();
+        givenCustomerExists();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(new FakeCustomer1());
 
         CreateCustomerView view = (CreateCustomerView) resource.createCustomer(uriInfo, session, form);
 
         assertThat(view.getError()).isEqualTo("customer 111111 already exists");
+    }
+
+    @Test
+    public void shouldCreateCustomerIfLoggedInAndCustomerDoesNotExist() {
+        givenUserIsLoggedIn();
+        givenCustomerDoesNotExist();
+        Customer customer = new FakeCustomer1();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(customer);
+
+        resource.createCustomer(uriInfo, session, form);
+
+        assertThat(facade.getLastCreatedCustomer()).isEqualToComparingFieldByField(customer);
+    }
+
+    @Test
+    public void shouldReturnCustomersViewIfLoggedInAndCustomerDoesNotExist() {
+        givenUserIsLoggedIn();
+        givenCustomerDoesNotExist();
+        Customer customer = new FakeCustomer1();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(customer);
+
+        View view = resource.createCustomer(uriInfo, session, form);
+
+        assertThat(view).isInstanceOf(CustomersView.class);
+    }
+
+    private void givenUserIsLoggedIn() {
+        session.setLoggedInUser(new FakeUserInfo());
+    }
+
+    private void givenCustomerExists() {
+        facade.setExists(true);
+    }
+
+    private void givenCustomerDoesNotExist() {
+        facade.setExists(false);
     }
 
 }

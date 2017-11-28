@@ -1,6 +1,6 @@
 package uk.co.mruoc.view;
 
-import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.Customer;
 
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;

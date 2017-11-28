@@ -2,7 +2,7 @@ package uk.co.mruoc.view;
 
 import org.junit.Test;
 import uk.co.mruoc.FakeUriInfo;
-import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.Customer;
 
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;

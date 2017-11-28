@@ -51,7 +51,7 @@ public class FakeUriInfo implements UriInfo {
 
     @Override
     public URI getBaseUri() {
-        return null;
+        return getBaseUriBuilder().build();
     }
 
     @Override

@@ -2,7 +2,6 @@ package uk.co.mruoc;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.flywaydb.core.Flyway;
-import uk.co.mruoc.api.Customer;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

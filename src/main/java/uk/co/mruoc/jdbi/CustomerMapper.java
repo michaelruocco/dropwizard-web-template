@@ -2,8 +2,8 @@ package uk.co.mruoc.jdbi;
 
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
-import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.api.Customer.CustomerBuilder;
+import uk.co.mruoc.Customer;
+import uk.co.mruoc.Customer.CustomerBuilder;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

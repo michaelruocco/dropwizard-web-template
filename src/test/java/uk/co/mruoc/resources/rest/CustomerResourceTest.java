@@ -1,128 +1,223 @@
 package uk.co.mruoc.resources.rest;
 
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 import uk.co.mruoc.*;
-import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.client.CustomerClient;
-import uk.co.mruoc.client.CustomerResponse;
+import uk.co.mruoc.Customer;
+import uk.co.mruoc.ErrorMessage;
+import uk.co.mruoc.facade.FakeCustomerFacade;
 
-import java.sql.SQLException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static uk.co.mruoc.TestConfig.*;
 
 public class CustomerResourceTest {
 
-    @ClassRule
-    public static final DropwizardAppRule<Config> RULE = new DropwizardAppRule<>(Application.class, RESOURCE_PATH);
+    private final FakeCustomerFacade facade = new FakeCustomerFacade();
+    private final FakeUriInfo uriInfo = new FakeUriInfo();
 
-    private final DatabaseConfigLoader configLoader = new DatabaseConfigLoader();
-    private final DatabaseConfig databaseConfig = configLoader.loadClasspathDatabaseConfig(CONFIG_PATH);
-    private final TestDatabase database = new TestDatabase(databaseConfig);
-    private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
-    private final CustomerClient client = new CustomerClient();
+    private final CustomerResource resource = new CustomerResource(facade);
 
-    @Before
-    public void setUp() {
-        database.setUp();
-        database.setUpCustomers();
-    }
+    @Test
+    public void getCustomerShouldReturnNotFoundStatusIfCustomerDoesNotExist() {
+        facade.setExists(false);
 
-    @After
-    public void tearDown() throws SQLException {
-        database.clearCustomers();
+        Response response = resource.getCustomer("");
+
+        assertThat(response.getStatus()).isEqualTo(404);
     }
 
     @Test
-    public void shouldCreateCustomer() {
-        Customer customer = customerBuilder.buildNewCustomer();
+    public void getCustomerShouldReturnErrorMessageIfCustomerDoesNotExist() {
+        facade.setExists(false);
 
-        CustomerResponse response = client.createCustomer(customer);
+        Response response = resource.getCustomer("123456");
 
-        assertThat(response.getStatusCode()).isEqualTo(201);
-        assertThat(response.getHeader("Location")).isEqualTo(buildNewCustomerUrl(customer));
-        assertThat(response.getCustomer()).isEqualToComparingFieldByField(customer);
+        ErrorMessage error = (ErrorMessage) response.getEntity();
+        assertThat(error.getMessage()).isEqualTo("customer 123456 not found");
     }
 
     @Test
-    public void shouldGetCustomer() {
-        Customer customer = customerBuilder.buildCustomer1();
+    public void getCustomerShouldReturnOkStatus() {
+        Customer customer = new FakeCustomer1();
+        facade.setCustomerToRead(customer);
+        facade.setExists(true);
 
-        CustomerResponse response = client.getCustomer(customer.getAccountNumber());
+        Response response = resource.getCustomer(customer.getAccountNumber());
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(response.getCustomer()).isEqualToComparingFieldByField(customer);
+        assertThat(response.getStatus()).isEqualTo(200);
     }
 
     @Test
-    public void shouldGetCustomers() {
-        List<Customer> customers = customerBuilder.buildCustomerList();
+    public void getCustomerShouldReturnCustomer() {
+        Customer customer = new FakeCustomer1();
+        facade.setCustomerToRead(customer);
+        facade.setExists(true);
 
-        CustomerResponse response = client.getCustomers();
+        Response response = resource.getCustomer(customer.getAccountNumber());
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(response.getHeader("X-Total-Count")).isEqualTo("2");
-        assertThat(response.getCustomers().size()).isEqualTo(2);
-        assertThat(response.getCustomers().get(0)).isEqualToComparingFieldByField(customers.get(0));
-        assertThat(response.getCustomers().get(1)).isEqualToComparingFieldByField(customers.get(1));
+        assertThat(response.getEntity()).isEqualTo(customer);
     }
 
     @Test
-    public void shouldUpdateCustomer() {
-        Customer updateCustomer = customerBuilder.buildUpdateCustomer1();
+    public void getCustomersShouldReturnCustomers() {
+        Customer customer1 = new FakeCustomer1();
+        Customer customer2 = new FakeCustomer2();
+        facade.setCustomersToRead(customer1, customer2);
 
-        CustomerResponse response = client.updateCustomer(updateCustomer);
+        Response response = resource.getCustomers();
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(response.getCustomer()).isEqualToComparingFieldByField(updateCustomer);
+        List<Customer> customers = (List<Customer>) response.getEntity();
+        assertThat(customers).contains(customer1, customer2);
     }
 
     @Test
-    public void shouldDeleteCustomer() {
-        Customer customer = customerBuilder.buildCustomer1();
+    public void getCustomersShouldReturnTotalCountHeader() {
+        Customer customer1 = new FakeCustomer1();
+        Customer customer2 = new FakeCustomer2();
+        facade.setCustomersToRead(customer1, customer2);
 
-        CustomerResponse response = client.deleteCustomer(customer.getAccountNumber());
+        Response response = resource.getCustomers();
 
-        assertThat(response.getStatusCode()).isEqualTo(204);
+        assertThat(response.getHeaderString("X-Total-Count")).isEqualTo("2");
     }
 
     @Test
-    public void  getShouldReturnErrorIfCustomerNotFound() {
-        Customer customer = customerBuilder.buildNewCustomer();
+    public void createCustomerShouldReturnConflictStatusIfCustomerExists() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(true);
 
-        CustomerResponse response = client.getCustomer(customer.getAccountNumber());
+        Response response = resource.createCustomer(customer, uriInfo);
 
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        assertThat(response.getErrorMessage()).isEqualTo("customer 333333 not found");
+        assertThat(response.getStatus()).isEqualTo(409);
     }
 
     @Test
-    public void updateShouldReturnErrorIfCustomerNotFound() {
-        Customer customer = customerBuilder.buildNewCustomer();
+    public void createCustomerShouldReturnErrorMessageIfCustomerExists() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(true);
 
-        CustomerResponse response = client.updateCustomer(customer);
+        Response response = resource.createCustomer(customer, uriInfo);
 
-        assertThat(response.getStatusCode()).isEqualTo(404);
-        assertThat(response.getErrorMessage()).isEqualTo("customer 333333 not found");
+        ErrorMessage error = (ErrorMessage) response.getEntity();
+        assertThat(error.getMessage()).isEqualTo("customer 333333 already exists");
     }
 
     @Test
-    public void shouldReturnErrorIfCustomerAlreadyExists() {
-        Customer customer = customerBuilder.buildCustomer1();
+    public void createCustomerShouldReturnCreatedStatus() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(false);
+        facade.setCustomerToRead(customer);
 
-        CustomerResponse response = client.createCustomer(customer);
+        Response response = resource.createCustomer(customer, uriInfo);
 
-        assertThat(response.getStatusCode()).isEqualTo(409);
-        assertThat(response.getErrorMessage()).isEqualTo("customer 111111 already exists");
+        assertThat(response.getStatus()).isEqualTo(201);
     }
 
-    private String buildNewCustomerUrl(Customer customer) {
-        return "http://localhost:8090/ws/v1/customers/" + customer.getAccountNumber();
+    @Test
+    public void createCustomerShouldCreateCustomer() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(false);
+        facade.setCustomerToRead(customer);
+
+        resource.createCustomer(customer, uriInfo);
+
+        assertThat(facade.getLastCreatedCustomer()).isEqualTo(customer);
+    }
+
+    @Test
+    public void createCustomerShouldReturnCreatedCustomerInResponseBody() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(false);
+        facade.setCustomerToRead(customer);
+
+        Response response = resource.createCustomer(customer, uriInfo);
+
+        assertThat(response.getEntity()).isEqualTo(customer);
+    }
+
+    @Test
+    public void createCustomerShouldReturnCreatedCustomerUrlInLocationHeader() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(false);
+        facade.setCustomerToRead(customer);
+        String expectedUrl = uriInfo.getBaseUri().toString() + "/ws/v1/customers/" + customer.getAccountNumber();
+
+        Response response = resource.createCustomer(customer, uriInfo);
+
+        assertThat(response.getHeaderString("Location")).isEqualTo(expectedUrl);
+    }
+
+    @Test
+    public void updateCustomerShouldReturnNotFoundStatusIfCustomerDoesNotExist() {
+        Customer customer = new FakeUpdatedCustomer1();
+        facade.setExists(false);
+
+        Response response = resource.updateCustomer(customer);
+
+        assertThat(response.getStatus()).isEqualTo(404);
+    }
+
+    @Test
+    public void updateCustomerShouldReturnErrorMessageIfCustomerDoesNotExist() {
+        Customer customer = new FakeUpdatedCustomer1();
+        facade.setExists(false);
+
+        Response response = resource.updateCustomer(customer);
+
+        ErrorMessage error = (ErrorMessage) response.getEntity();
+        assertThat(error.getMessage()).isEqualTo("customer 111111 not found");
+    }
+
+    @Test
+    public void updateCustomerShouldReturnOkStatus() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(true);
+        facade.setCustomerToRead(customer);
+
+        Response response = resource.updateCustomer(customer);
+
+        assertThat(response.getStatus()).isEqualTo(200);
+    }
+
+    @Test
+    public void updateCustomerShouldUpdateCustomer() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(true);
+        facade.setCustomerToRead(customer);
+
+        resource.updateCustomer(customer);
+
+        assertThat(facade.getLastUpdatedCustomer()).isEqualTo(customer);
+    }
+
+    @Test
+    public void updateCustomerShouldReturnUpdatedCustomerInResponseBody() {
+        Customer customer = new FakeNewCustomer();
+        facade.setExists(true);
+        facade.setCustomerToRead(customer);
+
+        Response response = resource.updateCustomer(customer);
+
+        assertThat(response.getEntity()).isEqualTo(customer);
+    }
+
+    @Test
+    public void deleteCustomerShouldReturnNoContentStatus() {
+        String accountNumber = "112233";
+
+        Response response = resource.deleteCustomer(accountNumber);
+
+        assertThat(response.getStatus()).isEqualTo(204);
+    }
+
+    @Test
+    public void deleteCustomerShouldDeleteCustomer() {
+        String accountNumber = "112233";
+
+        resource.deleteCustomer(accountNumber);
+
+        assertThat(facade.getLastDeletedAccountNumber()).isEqualTo(accountNumber);
     }
 
 }

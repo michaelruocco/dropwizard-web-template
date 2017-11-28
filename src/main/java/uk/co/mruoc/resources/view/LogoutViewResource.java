@@ -2,6 +2,7 @@ package uk.co.mruoc.resources.view;
 
 import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
+import uk.co.mruoc.auth.SessionUser;
 import uk.co.mruoc.view.IndexView;
 
 import javax.servlet.http.HttpSession;

@@ -8,10 +8,11 @@ import uk.co.mruoc.view.CustomersView;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/customers/")
-public class CustomersViewResource {
+public class CustomersViewResource extends LoginableViewResource {
 
     private final CustomerFacade customerFacade;
 
@@ -20,7 +21,10 @@ public class CustomersViewResource {
     }
 
     @GET
-    public View listCustomers(UriInfo uriInfo, @Session HttpSession session) {
+    public View listCustomers(@Context UriInfo uriInfo, @Session HttpSession session) {
+        if (!isLoggedIn(session))
+            return buildIndexView(uriInfo, session);
+
         return new CustomersView(session, uriInfo, customerFacade.read());
     }
 

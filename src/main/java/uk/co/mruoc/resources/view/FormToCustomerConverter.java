@@ -1,6 +1,6 @@
 package uk.co.mruoc.resources.view;
 
-import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.Customer;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.math.BigDecimal;

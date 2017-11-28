@@ -1,26 +1,28 @@
 package uk.co.mruoc.view;
 
 import io.dropwizard.views.View;
-import uk.co.mruoc.facade.UserInfo;
-import uk.co.mruoc.resources.view.AuthFactory;
-import uk.co.mruoc.resources.view.SessionUser;
+import uk.co.mruoc.auth.DefaultAuthFactory;
+import uk.co.mruoc.auth.UserInfo;
+import uk.co.mruoc.auth.AuthFactory;
+import uk.co.mruoc.auth.SessionUser;
 
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;
 
 public class LoginableView extends View {
 
-    private final AuthFactory authFactory = new AuthFactory();
+    private final AuthFactory authFactory;
     private final SessionUser sessionUser;
     private final UriInfo uriInfo;
 
     public LoginableView(String templateName, HttpSession session, UriInfo uriInfo) {
-        this(templateName, new SessionUser(session), uriInfo);
+        this(templateName, new DefaultAuthFactory(), session, uriInfo);
     }
 
-    public LoginableView(String templateName, SessionUser sessionUser, UriInfo uriInfo) {
+    public LoginableView(String templateName, AuthFactory authFactory, HttpSession session, UriInfo uriInfo) {
         super(templateName);
-        this.sessionUser = sessionUser;
+        this.authFactory = authFactory;
+        this.sessionUser = new SessionUser(session);
         this.uriInfo = uriInfo;
     }
 

@@ -1,7 +1,5 @@
 package uk.co.mruoc;
 
-import uk.co.mruoc.api.Customer;
-
 public class CustomerErrorMessageBuilder {
 
     public String buildAlreadyExists(Customer customer) {

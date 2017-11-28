@@ -1,6 +1,6 @@
 package uk.co.mruoc.resources.view;
 
-import uk.co.mruoc.api.Customer;
+import uk.co.mruoc.Customer;
 
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
@@ -9,7 +9,7 @@ import static java.util.Collections.singletonList;
 
 public class CustomerToFormConverter {
 
-    public MultivaluedMap<String, String> toForm(Customer customer) {
+    public static MultivaluedMap<String, String> toForm(Customer customer) {
         MultivaluedMap<String, String> form = new MultivaluedHashMap<>();
         form.put("accountNumber", singletonList(customer.getAccountNumber()));
         form.put("firstName", singletonList(customer.getFirstName()));

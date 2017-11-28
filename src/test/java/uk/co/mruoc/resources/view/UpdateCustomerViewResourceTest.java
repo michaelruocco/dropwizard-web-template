@@ -1,67 +1,117 @@
 package uk.co.mruoc.resources.view;
 
+import io.dropwizard.views.View;
 import org.junit.Test;
+import uk.co.mruoc.FakeCustomer1;
+import uk.co.mruoc.FakeHttpSession;
 import uk.co.mruoc.FakeUriInfo;
-import uk.co.mruoc.TestCustomerBuilder;
-import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.facade.CustomerFacade;
-import uk.co.mruoc.view.CustomersView;
-import uk.co.mruoc.view.UpdateCustomerView;
+import uk.co.mruoc.Customer;
+import uk.co.mruoc.auth.FakeUserInfo;
+import uk.co.mruoc.facade.FakeCustomerFacade;
+import uk.co.mruoc.view.*;
 
-import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class UpdateCustomerViewResourceTest {
 
-    private final CustomerToFormConverter formConverter = new CustomerToFormConverter();
-    private final TestCustomerBuilder customerBuilder = new TestCustomerBuilder();
-    private final CustomerFacade facade = mock(CustomerFacade.class);
-    private final HttpSession session = mock(HttpSession.class);
-    private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(facade);
+    private final FakeCustomerFacade facade = new FakeCustomerFacade();
+    private final FakeHttpSession session = new FakeHttpSession();
     private final UriInfo uriInfo = new FakeUriInfo();
 
-    @Test
-    public void shouldShowUpdateCustomer() {
-        String accountNumber = "123456";
-        Customer customer = customerBuilder.buildCustomer1();
-        given(facade.read(accountNumber)).willReturn(customer);
+    private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(facade);
 
-        UpdateCustomerView view = resource.showUpdateCustomer(uriInfo, session, accountNumber);
+    @Test
+    public void showUpdateCustomerShouldReturnIndexViewIfNotLoggedIn() {
+        View view = resource.showUpdateCustomer(uriInfo, session, "");
+
+        assertThat(view).isInstanceOf(IndexView.class);
+    }
+
+    @Test
+    public void showUpdateCustomerShouldReturnUpdateCustomerViewIfLoggedIn() {
+        givenUserIsLoggedIn();
+        Customer customer = new FakeCustomer1();
+        facade.setCustomerToRead(customer);
+
+        UpdateCustomerView view = (UpdateCustomerView) resource.showUpdateCustomer(uriInfo, session, customer.getAccountNumber());
 
         assertThat(view.getCustomer()).isEqualTo(customer);
     }
 
     @Test
-    public void shouldUpdateCustomer() {
-        List<Customer> customers = customerBuilder.buildCustomerList();
-        Customer customer = customers.get(0);
-        MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        given(facade.exists(customer.getAccountNumber())).willReturn(true);
-        given(facade.read()).willReturn(customers);
+    public void shouldNotUpdateCustomerIfNotLoggedIn() {
+        resource.updateCustomer(uriInfo, session, new MultivaluedHashMap<>());
 
-        CustomersView view = (CustomersView) resource.updateCustomer(uriInfo, session, form);
-
-        verify(facade).update(any(Customer.class));
-        assertThat(view.getCustomers()).isEqualTo(customers);
+        assertThat(facade.updateCustomerCalled()).isFalse();
     }
 
     @Test
-    public void shouldShowErrorIfUpdateCustomerFails() {
-        Customer customer = customerBuilder.buildCustomer1();
-        MultivaluedMap<String, String> form = formConverter.toForm(customer);
-        given(facade.exists(customer.getAccountNumber())).willReturn(false);
+    public void shouldReturnIndexViewIfNotLoggedIn() {
+        View view = resource.updateCustomer(uriInfo, session, new MultivaluedHashMap<>());
 
-        UpdateCustomerView view = (UpdateCustomerView) resource.updateCustomer(uriInfo, session, form);
+        assertThat(view).isInstanceOf(IndexView.class);
+    }
+
+    @Test
+    public void shouldNotUpdateCustomerIfLoggedInAndCustomerDoesNotExist() {
+        givenUserIsLoggedIn();
+        givenCustomerDoesNotExist();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(new FakeCustomer1());
+
+        resource.updateCustomer(uriInfo, session, form);
+
+        assertThat(facade.updateCustomerCalled()).isFalse();
+    }
+
+    @Test
+    public void shouldReturnUpdateCustomerViewWithErrorMessageIfLoggedInAndCustomerDoesNotExist() {
+        givenUserIsLoggedIn();
+        givenCustomerDoesNotExist();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(new FakeCustomer1());
+
+        UpdateCustomerErrorView view = (UpdateCustomerErrorView) resource.updateCustomer(uriInfo, session, form);
 
         assertThat(view.getError()).isEqualTo("customer 111111 not found");
+    }
+
+    @Test
+    public void shouldUpdateCustomerIfLoggedInAndCustomerExists() {
+        givenUserIsLoggedIn();
+        givenCustomerExists();
+        Customer customer = new FakeCustomer1();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(customer);
+
+        resource.updateCustomer(uriInfo, session, form);
+
+        assertThat(facade.getLastUpdatedCustomer()).isEqualToComparingFieldByField(customer);
+    }
+
+    @Test
+    public void shouldReturnCustomersViewIfLoggedInAndCustomerExists() {
+        givenUserIsLoggedIn();
+        givenCustomerExists();
+        Customer customer = new FakeCustomer1();
+        MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(customer);
+
+        View view = resource.updateCustomer(uriInfo, session, form);
+
+        assertThat(view).isInstanceOf(CustomersView.class);
+    }
+
+    private void givenUserIsLoggedIn() {
+        session.setLoggedInUser(new FakeUserInfo());
+    }
+
+    private void givenCustomerExists() {
+        facade.setExists(true);
+    }
+
+    private void givenCustomerDoesNotExist() {
+        facade.setExists(false);
     }
 
 }

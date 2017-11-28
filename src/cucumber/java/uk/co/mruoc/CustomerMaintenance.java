@@ -5,14 +5,7 @@ import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import gherkin.formatter.model.DataTableRow;
-import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.api.Customer.CustomerBuilder;
-import uk.co.mruoc.client.CustomerClient;
-import uk.co.mruoc.client.CustomerResponse;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -123,30 +116,6 @@ public class CustomerMaintenance {
             Customer expectedCustomer = expectedCustomers.get(i);
             assertThat(customer).isEqualToComparingFieldByField(expectedCustomer);
         }
-    }
-
-    private static class CustomerConverter {
-
-        private List<Customer> toCustomers(DataTable table) {
-            List<Customer> customers = new ArrayList<>();
-            List<DataTableRow> rows = table.getGherkinRows();
-            for (int r = 1; r < rows.size(); r++) {
-                DataTableRow row = rows.get(r);
-                customers.add(toCustomer(row));
-            }
-            return customers;
-        }
-
-        private Customer toCustomer(DataTableRow row) {
-            List<String> cells = row.getCells();
-            return new CustomerBuilder()
-                    .setAccountNumber(cells.get(0))
-                    .setFirstName(cells.get(1))
-                    .setSurname(cells.get(2))
-                    .setBalance(new BigDecimal(cells.get(3)))
-                    .build();
-        }
-
     }
 
 }

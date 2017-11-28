@@ -5,8 +5,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
-import uk.co.mruoc.api.Customer;
-import uk.co.mruoc.api.ErrorMessage;
+import uk.co.mruoc.Customer;
+import uk.co.mruoc.ErrorMessage;
 import uk.co.mruoc.facade.CustomerFacade;
 
 import javax.ws.rs.*;
@@ -87,7 +87,10 @@ public class CustomerResource {
     }
 
     private URI getNewCustomerUri(Customer customer, UriInfo info) {
-        return info.getBaseUriBuilder().path("ws/v1/customers/" + customer.getAccountNumber()).build();
+        return info.getBaseUriBuilder()
+                .path("ws/v1/customers/")
+                .path(customer.getAccountNumber())
+                .build();
     }
 
     private ErrorMessage toError(String message) {
@@ -95,7 +98,8 @@ public class CustomerResource {
     }
 
     private Response buildNotFoundResponse(String accountNumber) {
-        return Response.status(404).entity(toError(errorMessageBuilder.buildNotFound(accountNumber))).build();
+        ErrorMessage error = toError(errorMessageBuilder.buildNotFound(accountNumber));
+        return Response.status(404).entity(error).build();
     }
 
 }
