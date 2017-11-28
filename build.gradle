@@ -9,17 +9,18 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.yaml:snakeyaml:1.17'
-        classpath 'com.wiredforcode:gradle-spawn-plugin:0.6.0'
+        classpath 'org.yaml:snakeyaml:1.19'
+        classpath 'com.wiredforcode:gradle-spawn-plugin:0.8.1'
     }
 }
 
 plugins {
-    id "com.github.michaelruocco.embedded-mysql-plugin" version "2.1.5"
-    id "com.github.onslip.gradle-one-jar" version "1.0.5"
-    id "org.flywaydb.flyway" version "4.2.0"
-    id "com.github.samueltbrown.cucumber" version "0.9"
-    id "com.github.kt3k.coveralls" version "2.8.2"
+    id 'com.github.michaelruocco.embedded-mysql-plugin' version '2.1.5'
+    id 'com.github.onslip.gradle-one-jar' version '1.0.5'
+    id 'org.flywaydb.flyway' version '4.2.0'
+    id 'com.github.samueltbrown.cucumber' version '0.9'
+    id 'com.github.kt3k.coveralls' version '2.8.2'
+    id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 apply plugin: 'java'
@@ -47,21 +48,21 @@ dependencies {
     compile 'io.dropwizard:dropwizard-testing:1.2.1'
     compile 'io.dropwizard:dropwizard-views-freemarker:1.2.1'
     compile 'uk.co.deloittedigital.dropwizard:dropwizard-hikaricp:1.0.0'
-    compile 'org.jdbi:jdbi:2.77'
-    compile 'mysql:mysql-connector-java:6.0.5'
+    compile 'org.jdbi:jdbi:2.78'
+    compile 'mysql:mysql-connector-java:6.0.6'
     compile 'com.smoketurner:dropwizard-swagger:1.0.0-1'
-    compile 'org.apache.httpcomponents:httpclient:4.5.2'
+    compile 'org.apache.httpcomponents:httpclient:4.5.3'
     compile 'com.github.michaelruocco:http-client:4.0.4'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.5.2'
+    testCompile 'org.assertj:assertj-core:3.8.0'
     testCompile 'info.cukes:cucumber-java:1.2.5'
     testCompile 'info.cukes:cucumber-junit:1.2.5'
-    testCompile 'org.yaml:snakeyaml:1.17'
-    testCompile 'com.h2database:h2:1.4.193'
+    testCompile 'org.yaml:snakeyaml:1.19'
+    testCompile 'com.h2database:h2:1.4.196'
     testCompile 'commons-dbcp:commons-dbcp:1.4'
     testCompile 'org.mockito:mockito-all:1.10.19'
-    testCompile 'org.flywaydb:flyway-core:4.0.3'
+    testCompile 'org.flywaydb:flyway-core:4.2.0'
 }
 
 def getConfigPath() {

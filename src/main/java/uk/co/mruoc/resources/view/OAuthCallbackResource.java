@@ -1,4 +1,4 @@
-package uk.co.mruoc.resources.rest;
+package uk.co.mruoc.resources.view;
 
 import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;

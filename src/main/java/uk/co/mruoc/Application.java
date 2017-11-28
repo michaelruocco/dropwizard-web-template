@@ -15,7 +15,7 @@ import uk.co.mruoc.auth.DefaultAuthFactory;
 import uk.co.mruoc.facade.*;
 import uk.co.mruoc.jdbi.CustomerDao;
 import uk.co.mruoc.resources.rest.CustomerResource;
-import uk.co.mruoc.resources.rest.OAuthCallbackResource;
+import uk.co.mruoc.resources.view.OAuthCallbackResource;
 import uk.co.mruoc.resources.view.*;
 
 public class Application extends io.dropwizard.Application<Config> {
@@ -32,7 +32,7 @@ public class Application extends io.dropwizard.Application<Config> {
         bootstrap.addBundle(new SwaggerBundle<Config>() {
             @Override
             protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(Config config) {
-                return config.getSwaggerBundleConfiguration();
+                return config.swaggerBundleConfiguration;
             }
         });
         bootstrap.addBundle(new ViewBundle<>());

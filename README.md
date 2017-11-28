@@ -105,3 +105,13 @@ GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
 ```
+
+
+## Checking dependencies
+
+You can check the current dependencies used by the project to see whether
+or not they are currently up to date by running the following command:
+
+```
+gradlew dependencyUpdates
+```

@@ -11,7 +11,8 @@ import javax.validation.constraints.NotNull;
 
 public class Config extends io.dropwizard.Configuration implements HikariConfigurationProvider {
 
-    private SwaggerBundleConfiguration swaggerBundleConfiguration;
+    @JsonProperty("swagger")
+    public SwaggerBundleConfiguration swaggerBundleConfiguration;
 
     @Valid
     @NotNull
@@ -27,15 +28,6 @@ public class Config extends io.dropwizard.Configuration implements HikariConfigu
         hikariConfiguration.username = database.getUser();
         hikariConfiguration.password = database.getPassword();
         return hikariConfiguration;
-    }
-
-    @JsonProperty("swagger")
-    public void setSwaggerBundleConfiguration(SwaggerBundleConfiguration swaggerBundleConfiguration) {
-        this.swaggerBundleConfiguration = swaggerBundleConfiguration;
-    }
-
-    public SwaggerBundleConfiguration getSwaggerBundleConfiguration() {
-        return swaggerBundleConfiguration;
     }
 
     public DataSourceFactory getDataSourceFactory() {

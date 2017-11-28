@@ -1,4 +1,4 @@
-package uk.co.mruoc.resources.rest;
+package uk.co.mruoc.resources.view;
 
 import io.dropwizard.views.View;
 import org.junit.Test;
