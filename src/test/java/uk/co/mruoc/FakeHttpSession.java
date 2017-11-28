@@ -35,7 +35,7 @@ public class FakeHttpSession implements HttpSession {
 
     @Override
     public void setMaxInactiveInterval(int interval) {
-
+        // intentionally blank
     }
 
     @Override
@@ -75,7 +75,7 @@ public class FakeHttpSession implements HttpSession {
 
     @Override
     public void putValue(String name, Object value) {
-
+        // intentionally blank
     }
 
     @Override
@@ -85,12 +85,12 @@ public class FakeHttpSession implements HttpSession {
 
     @Override
     public void removeValue(String name) {
-
+        // intentionally blank
     }
 
     @Override
     public void invalidate() {
-
+        // intentionally blank
     }
 
     @Override

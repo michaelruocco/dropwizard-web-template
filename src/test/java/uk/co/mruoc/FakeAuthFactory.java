@@ -15,7 +15,7 @@ public class FakeAuthFactory implements AuthFactory {
 
     @Override
     public boolean canAuth(String type) {
-        return type.toLowerCase().equals("google");
+        return type.equalsIgnoreCase("google");
     }
 
     @Override
