@@ -59,10 +59,9 @@ machine you can run the application using the following commands:
 docker-compose up app
 ```
 
-This will fire up docker containers, a mysql database, a container that will run the flyway
+This will fire up three docker containers, a mysql database, a container that will run the flyway
 migrations against that database and a third container that will run the app. Once all the containers
-have started up you can access the application here: Once this is complete you will be able to view
-the application [here](http://localhost:8090/).
+have started up you can access the application [here](http://localhost:8090/).
 
 ## SSO
 
@@ -98,13 +97,14 @@ create a .env file in the root of the project and set values for three environme
 below:
 
 ```
+#FAKE_CLIENT_ID=fake      # uncomment this line to enable fake SSO
+
 GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>
 GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>
 
 GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
 GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
 ```
-
 
 ## Checking dependencies
 
