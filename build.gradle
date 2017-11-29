@@ -16,11 +16,11 @@ buildscript {
 
 plugins {
     id 'com.github.michaelruocco.embedded-mysql-plugin' version '2.1.5'
-    id 'com.github.onslip.gradle-one-jar' version '1.0.5'
     id 'org.flywaydb.flyway' version '4.2.0'
     id 'com.github.samueltbrown.cucumber' version '0.9'
     id 'com.github.kt3k.coveralls' version '2.8.2'
     id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
 }
 
 apply plugin: 'java'
@@ -51,7 +51,6 @@ dependencies {
     compile 'org.jdbi:jdbi:2.78'
     compile 'mysql:mysql-connector-java:6.0.6'
     compile 'com.smoketurner:dropwizard-swagger:1.0.0-1'
-    compile 'org.apache.httpcomponents:httpclient:4.5.3'
     compile 'com.github.michaelruocco:http-client:4.0.4'
 
     testCompile 'junit:junit:4.12'
@@ -120,22 +119,24 @@ run {
     args 'server', configPath
 }
 
-def getMainClassName() {
-    'uk.co.mruoc.Main'
+mainClassName = 'uk.co.mruoc.Main'
+
+shadowJar {
+    mergeServiceFiles()
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
 }
 
-def getArtifactName() {
-    project.ext.artifactId + '-standalone'
-}
-
-task allJar(type: OneJar) {
-    mainClass = mainClassName
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }
 
 task startServer(type: SpawnProcessTask) {
-    dependsOn allJar, setupMysql
-    setupMysql.mustRunAfter allJar
-    command 'java -jar build/libs/' + artifactName + '.jar server ' + configPath
+    dependsOn shadowJar, setupMysql
+    setupMysql.mustRunAfter shadowJar
+    command 'java -jar build/libs/' + project.ext.artifactId + '-all.jar server ' + configPath
     ready 'org.eclipse.jetty.server.Server: Started'
 }
 
@@ -157,4 +158,8 @@ jacocoTestReport {
         xml.enabled = true
         html.enabled = true
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.0'
 }

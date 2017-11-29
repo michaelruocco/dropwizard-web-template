@@ -9,13 +9,13 @@ services:
       DB_HOST: app_db
       DB_DATABASE: web_template
     depends_on:
-      - db
+      - app_db
     volumes:
       - ./src/main/resources/db/migration:/sql
     command: ["migrate"]
 
-  db:
-    image: mysql
+  app_db:
+    image: mysql:5.6
     container_name: app_db
     ports:
       - 3306:3306
