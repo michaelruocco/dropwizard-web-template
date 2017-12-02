@@ -13,11 +13,14 @@ public class FakeAuthenticatorTest {
 
     private final UriInfo uriInfo = new FakeUriInfo();
     private final FakeHttpSession session = new FakeHttpSession();
+    private final SessionFakeId fakeId = new SessionFakeId(session);
 
     private final Authenticator authenticator = new FakeAuthenticator();
 
     @Test
     public void shouldPopulateFakeUserInfoOnSession() {
+        fakeId.set("fake.user@web.template.co.uk");
+
         HttpSession result = authenticator.handleCallback(uriInfo, session, "fake", "my-state");
 
         assertThat(result.getAttribute("userInfo")).isEqualToComparingFieldByField(new FakeUserInfo());

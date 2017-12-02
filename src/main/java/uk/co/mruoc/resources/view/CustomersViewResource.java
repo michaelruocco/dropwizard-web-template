@@ -2,6 +2,7 @@ package uk.co.mruoc.resources.view;
 
 import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
+import uk.co.mruoc.auth.AuthenticatedResource;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomersView;
 
@@ -11,8 +12,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
+@AuthenticatedResource
 @Path("/customers/")
-public class CustomersViewResource extends LoginableViewResource {
+public class CustomersViewResource {
 
     private final CustomerFacade customerFacade;
 
@@ -22,9 +24,6 @@ public class CustomersViewResource extends LoginableViewResource {
 
     @GET
     public View listCustomers(@Context UriInfo uriInfo, @Session HttpSession session) {
-        if (!isLoggedIn(session))
-            return buildIndexView(uriInfo, session);
-
         return new CustomersView(session, uriInfo, customerFacade.read());
     }
 

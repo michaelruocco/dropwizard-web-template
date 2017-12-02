@@ -5,7 +5,7 @@ import uk.co.mruoc.Customer;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;
 
-public class CreateCustomerView extends LoginableView {
+public class CreateCustomerView extends AuthenticatedView {
 
     private final String error;
 

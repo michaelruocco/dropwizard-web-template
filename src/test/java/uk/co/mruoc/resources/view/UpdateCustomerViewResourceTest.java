@@ -6,11 +6,9 @@ import uk.co.mruoc.FakeCustomer1;
 import uk.co.mruoc.FakeHttpSession;
 import uk.co.mruoc.FakeUriInfo;
 import uk.co.mruoc.Customer;
-import uk.co.mruoc.auth.FakeUserInfo;
 import uk.co.mruoc.facade.FakeCustomerFacade;
 import uk.co.mruoc.view.*;
 
-import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 
@@ -25,15 +23,7 @@ public class UpdateCustomerViewResourceTest {
     private final UpdateCustomerViewResource resource = new UpdateCustomerViewResource(facade);
 
     @Test
-    public void showUpdateCustomerShouldReturnIndexViewIfNotLoggedIn() {
-        View view = resource.showUpdateCustomer(uriInfo, session, "");
-
-        assertThat(view).isInstanceOf(IndexView.class);
-    }
-
-    @Test
-    public void showUpdateCustomerShouldReturnUpdateCustomerViewIfLoggedIn() {
-        givenUserIsLoggedIn();
+    public void showUpdateCustomerShouldReturnUpdateCustomerView() {
         Customer customer = new FakeCustomer1();
         facade.setCustomerToRead(customer);
 
@@ -43,22 +33,7 @@ public class UpdateCustomerViewResourceTest {
     }
 
     @Test
-    public void shouldNotUpdateCustomerIfNotLoggedIn() {
-        resource.updateCustomer(uriInfo, session, new MultivaluedHashMap<>());
-
-        assertThat(facade.updateCustomerCalled()).isFalse();
-    }
-
-    @Test
-    public void shouldReturnIndexViewIfNotLoggedIn() {
-        View view = resource.updateCustomer(uriInfo, session, new MultivaluedHashMap<>());
-
-        assertThat(view).isInstanceOf(IndexView.class);
-    }
-
-    @Test
-    public void shouldNotUpdateCustomerIfLoggedInAndCustomerDoesNotExist() {
-        givenUserIsLoggedIn();
+    public void shouldNotUpdateCustomerIfCustomerDoesNotExist() {
         givenCustomerDoesNotExist();
         MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(new FakeCustomer1());
 
@@ -68,8 +43,7 @@ public class UpdateCustomerViewResourceTest {
     }
 
     @Test
-    public void shouldReturnUpdateCustomerViewWithErrorMessageIfLoggedInAndCustomerDoesNotExist() {
-        givenUserIsLoggedIn();
+    public void shouldReturnUpdateCustomerViewWithErrorMessageIfCustomerDoesNotExist() {
         givenCustomerDoesNotExist();
         MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(new FakeCustomer1());
 
@@ -79,8 +53,7 @@ public class UpdateCustomerViewResourceTest {
     }
 
     @Test
-    public void shouldUpdateCustomerIfLoggedInAndCustomerExists() {
-        givenUserIsLoggedIn();
+    public void shouldUpdateCustomerIfCustomerExists() {
         givenCustomerExists();
         Customer customer = new FakeCustomer1();
         MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(customer);
@@ -91,8 +64,7 @@ public class UpdateCustomerViewResourceTest {
     }
 
     @Test
-    public void shouldReturnCustomersViewIfLoggedInAndCustomerExists() {
-        givenUserIsLoggedIn();
+    public void shouldReturnCustomersViewIfCustomerExists() {
         givenCustomerExists();
         Customer customer = new FakeCustomer1();
         MultivaluedMap<String, String> form = CustomerToFormConverter.toForm(customer);
@@ -100,10 +72,6 @@ public class UpdateCustomerViewResourceTest {
         View view = resource.updateCustomer(uriInfo, session, form);
 
         assertThat(view).isInstanceOf(CustomersView.class);
-    }
-
-    private void givenUserIsLoggedIn() {
-        session.setLoggedInUser(new FakeUserInfo());
     }
 
     private void givenCustomerExists() {

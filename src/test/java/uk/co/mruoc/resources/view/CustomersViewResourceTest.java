@@ -25,15 +25,7 @@ public class CustomersViewResourceTest {
     private final CustomersViewResource resource = new CustomersViewResource(facade);
 
     @Test
-    public void shouldReturnIndexViewIfNotLoggedIn() {
-        View view = resource.listCustomers(uriInfo, session);
-
-        assertThat(view).isInstanceOf(IndexView.class);
-    }
-
-    @Test
-    public void shouldListCustomersIfLoggedIn() {
-        givenUserIsLoggedIn();
+    public void shouldListCustomers() {
         List<Customer> customers = Arrays.asList(new FakeCustomer1(), new FakeCustomer2());
         facade.setCustomersToRead(customers);
 
@@ -41,10 +33,5 @@ public class CustomersViewResourceTest {
 
         assertThat(view.getCustomers()).isEqualTo(customers);
     }
-
-    private void givenUserIsLoggedIn() {
-        session.setLoggedInUser(new FakeUserInfo());
-    }
-
 
 }

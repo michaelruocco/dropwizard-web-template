@@ -12,7 +12,7 @@ import javax.ws.rs.core.UriInfo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoginableViewTest {
+public class AuthenticatedViewTest {
 
     private static final String TEMPLATE_NAME = "my-template.ftl";
 
@@ -20,7 +20,7 @@ public class LoginableViewTest {
     private final FakeHttpSession session = new FakeHttpSession();
     private final UriInfo uriInfo = new FakeUriInfo();
 
-    private final LoginableView view = new LoginableView(TEMPLATE_NAME, authFactory, session, uriInfo);
+    private final AuthenticatedView view = new AuthenticatedView(TEMPLATE_NAME, authFactory, session, uriInfo);
 
     @Test
     public void shouldReturnTemplateName() {

@@ -2,6 +2,7 @@ package uk.co.mruoc.resources.view;
 
 import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
+import uk.co.mruoc.auth.AuthenticatedResource;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomersView;
 
@@ -12,8 +13,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
+@AuthenticatedResource
 @Path("/deleteCustomer/")
-public class DeleteCustomerViewResource extends LoginableViewResource {
+public class DeleteCustomerViewResource {
 
     private final CustomerFacade customerFacade;
 
@@ -23,9 +25,6 @@ public class DeleteCustomerViewResource extends LoginableViewResource {
 
     @GET
     public View deleteCustomer(@Context UriInfo uriInfo, @Session HttpSession session, @QueryParam("accountNumber") String accountNumber) {
-        if (!isLoggedIn(session))
-            return buildIndexView(uriInfo, session);
-
         customerFacade.delete(accountNumber);
         return new CustomersView(session, uriInfo, customerFacade.read());
     }

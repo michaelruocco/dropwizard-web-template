@@ -5,7 +5,7 @@ import uk.co.mruoc.Customer;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;
 
-public class UpdateCustomerView extends LoginableView {
+public class UpdateCustomerView extends AuthenticatedView {
 
     private final Customer customer;
 

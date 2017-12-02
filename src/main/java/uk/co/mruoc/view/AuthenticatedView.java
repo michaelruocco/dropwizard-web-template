@@ -9,17 +9,17 @@ import uk.co.mruoc.auth.SessionUser;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;
 
-public class LoginableView extends View {
+public class AuthenticatedView extends View {
 
     private final AuthFactory authFactory;
     private final SessionUser sessionUser;
     private final UriInfo uriInfo;
 
-    public LoginableView(String templateName, HttpSession session, UriInfo uriInfo) {
+    public AuthenticatedView(String templateName, HttpSession session, UriInfo uriInfo) {
         this(templateName, new DefaultAuthFactory(), session, uriInfo);
     }
 
-    public LoginableView(String templateName, AuthFactory authFactory, HttpSession session, UriInfo uriInfo) {
+    public AuthenticatedView(String templateName, AuthFactory authFactory, HttpSession session, UriInfo uriInfo) {
         super(templateName);
         this.authFactory = authFactory;
         this.sessionUser = new SessionUser(session);

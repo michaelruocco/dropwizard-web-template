@@ -11,6 +11,7 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.skife.jdbi.v2.DBI;
 import uk.co.deloittedigital.dropwizard.hikari.HikariBundle;
 import uk.co.mruoc.auth.AuthFactory;
+import uk.co.mruoc.auth.AuthLoginFeature;
 import uk.co.mruoc.auth.DefaultAuthFactory;
 import uk.co.mruoc.facade.*;
 import uk.co.mruoc.jdbi.CustomerDao;
@@ -45,6 +46,9 @@ public class Application extends io.dropwizard.Application<Config> {
         env.jersey().register(new OAuthCallbackResource(authFactory));
         env.jersey().register(new OAuthLoginViewResource());
         env.jersey().register(new LogoutViewResource());
+
+        env.jersey().register(new AuthLoginFeature());
+
         env.servlets().setSessionHandler(new SessionHandler());
 
         final DBIFactory factory = new DBIFactory();

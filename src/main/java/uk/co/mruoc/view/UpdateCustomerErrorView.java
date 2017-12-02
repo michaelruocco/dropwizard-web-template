@@ -3,7 +3,7 @@ package uk.co.mruoc.view;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;
 
-public class UpdateCustomerErrorView extends LoginableView {
+public class UpdateCustomerErrorView extends AuthenticatedView {
 
     private final String error;
 

@@ -7,6 +7,7 @@ import uk.co.mruoc.FakeUriInfo;
 import uk.co.mruoc.auth.AuthFactory;
 import uk.co.mruoc.auth.DefaultAuthFactory;
 import uk.co.mruoc.auth.FakeUserInfo;
+import uk.co.mruoc.auth.SessionFakeId;
 import uk.co.mruoc.view.IndexView;
 
 import javax.ws.rs.core.UriInfo;
@@ -18,11 +19,14 @@ public class OAuthCallbackResourceTest {
     private final AuthFactory authFactory = new DefaultAuthFactory();
     private final UriInfo uriInfo = new FakeUriInfo();
     private final FakeHttpSession session = new FakeHttpSession();
+    private final SessionFakeId fakeId = new SessionFakeId(session);
 
     private final OAuthCallbackResource resource = new OAuthCallbackResource(authFactory);
 
     @Test
     public void shouldHandleCallbackFromAuthenticator() {
+        fakeId.set("fake.user@web.template.co.uk");
+
         resource.auth(uriInfo, session, "fake", "my-code", "my-state");
 
         assertThat(session.getLoggedInUser()).isEqualToComparingFieldByField(new FakeUserInfo());

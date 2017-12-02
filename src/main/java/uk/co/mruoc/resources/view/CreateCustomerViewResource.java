@@ -4,6 +4,7 @@ import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.Customer;
+import uk.co.mruoc.auth.AuthenticatedResource;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CreateCustomerView;
 import uk.co.mruoc.view.CustomersView;
@@ -19,8 +20,9 @@ import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.*;
 
+@AuthenticatedResource
 @Path("/createCustomer/")
-public class CreateCustomerViewResource extends LoginableViewResource {
+public class CreateCustomerViewResource {
 
     private final CustomerErrorMessageBuilder errorMessageBuilder = new CustomerErrorMessageBuilder();
     private final FormToCustomerConverter converter = new FormToCustomerConverter();
@@ -32,18 +34,12 @@ public class CreateCustomerViewResource extends LoginableViewResource {
 
     @GET
     public View showCreateCustomer(@Context UriInfo uriInfo, @Session HttpSession session) {
-        if (!isLoggedIn(session))
-            return buildIndexView(uriInfo, session);
-
         return new CreateCustomerView(session, uriInfo);
     }
 
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
     public View createCustomer(@Context UriInfo uriInfo, @Session HttpSession session, MultivaluedMap<String, String> form) {
-        if (!isLoggedIn(session))
-            return buildIndexView(uriInfo, session);
-
         return handleCreateCustomer(uriInfo, session, form);
     }
 

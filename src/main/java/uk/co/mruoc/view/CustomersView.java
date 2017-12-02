@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-public class CustomersView extends LoginableView {
+public class CustomersView extends AuthenticatedView {
 
     private List<Customer> customers;
 

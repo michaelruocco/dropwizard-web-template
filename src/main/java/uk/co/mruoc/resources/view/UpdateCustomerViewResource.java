@@ -4,6 +4,7 @@ import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.Customer;
+import uk.co.mruoc.auth.AuthenticatedResource;
 import uk.co.mruoc.facade.CustomerFacade;
 import uk.co.mruoc.view.CustomersView;
 import uk.co.mruoc.view.UpdateCustomerErrorView;
@@ -17,8 +18,9 @@ import javax.ws.rs.core.UriInfo;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 
+@AuthenticatedResource
 @Path("/updateCustomer/")
-public class UpdateCustomerViewResource extends LoginableViewResource {
+public class UpdateCustomerViewResource {
 
     private final CustomerErrorMessageBuilder errorMessageBuilder = new CustomerErrorMessageBuilder();
     private final FormToCustomerConverter converter = new FormToCustomerConverter();
@@ -30,9 +32,6 @@ public class UpdateCustomerViewResource extends LoginableViewResource {
 
     @GET
     public View showUpdateCustomer(@Context UriInfo uriInfo, @Session HttpSession session, @QueryParam("accountNumber") String accountNumber) {
-        if (!isLoggedIn(session))
-            return buildIndexView(uriInfo, session);
-
         Customer customer = customerFacade.read(accountNumber);
         return new UpdateCustomerView(session, uriInfo, customer);
     }
@@ -40,9 +39,6 @@ public class UpdateCustomerViewResource extends LoginableViewResource {
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
     public View updateCustomer(@Context UriInfo uriInfo, @Session HttpSession session, MultivaluedMap<String, String> form) {
-        if (!isLoggedIn(session))
-            return buildIndexView(uriInfo, session);
-
         return handleUpdateCustomer(uriInfo, session, form);
     }
 
