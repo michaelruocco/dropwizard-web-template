@@ -9,7 +9,7 @@ public class GoogleAuthenticator extends BaseAuthenticator {
     }
 
     public GoogleAuthenticator(UserInfoConverter userInfoConverter) {
-        super(new SimpleHttpClient(), new GoogleAuthConfig(), new GoogleUserInfoConverter());
+        super(new SimpleHttpClient(), new GoogleAuthConfig(), userInfoConverter);
     }
 
 }
