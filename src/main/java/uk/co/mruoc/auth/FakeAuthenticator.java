@@ -7,8 +7,10 @@ public class FakeAuthenticator implements Authenticator {
 
     @Override
     public HttpSession handleCallback(UriInfo uriInfo, HttpSession session, String code, String state) {
-        SessionUser sessionUser = new SessionUser(session);
-        sessionUser.setInfo(new FakeUserInfo());
+        SessionUser user = new SessionUser(session);
+        SessionFakeId fakeId = new SessionFakeId(session);
+        user.setInfo(new FakeUserInfo(fakeId.get()));
+        fakeId.clear();
         return session;
     }
 

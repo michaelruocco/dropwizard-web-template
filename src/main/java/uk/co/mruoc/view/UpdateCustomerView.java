@@ -15,8 +15,6 @@ public class UpdateCustomerView extends LoginableView {
     }
 
     public Customer getCustomer() {
-        System.out.println("GET CUSTOMER *********** " + customer.getBalance());
-        System.out.println("GET CUSTOMER *********** " + customer.getBalance().toPlainString());
         return customer;
     }
 

@@ -2,6 +2,18 @@ package uk.co.mruoc.auth;
 
 public class FakeUserInfo implements UserInfo {
 
+    private static final String DEFAULT_USERNAME = "fake.user@web.template.co.uk";
+
+    private final String username;
+
+    public FakeUserInfo() {
+        this(DEFAULT_USERNAME);
+    }
+
+    public FakeUserInfo(String username) {
+        this.username = username;
+    }
+
     @Override
     public String getId() {
         return "123456789";
@@ -9,7 +21,7 @@ public class FakeUserInfo implements UserInfo {
 
     @Override
     public String getUsername() {
-        return "fake.user@web.template.co.uk";
+        return username;
     }
 
     @Override

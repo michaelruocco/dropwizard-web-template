@@ -43,6 +43,7 @@ public class Application extends io.dropwizard.Application<Config> {
         final AuthFactory authFactory = new DefaultAuthFactory();
         env.jersey().register(new IndexViewResource());
         env.jersey().register(new OAuthCallbackResource(authFactory));
+        env.jersey().register(new OAuthLoginViewResource());
         env.jersey().register(new LogoutViewResource());
         env.servlets().setSessionHandler(new SessionHandler());
 
