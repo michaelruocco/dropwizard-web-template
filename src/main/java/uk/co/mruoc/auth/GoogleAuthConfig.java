@@ -28,7 +28,7 @@ public class GoogleAuthConfig implements AuthConfig {
 
     @Override
     public String getRedirectUrl(UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().path("oauth2callback/google").toTemplate();
+        return uriInfo.getBaseUriBuilder().path(AuthEndpoints.GOOGLE_LOGIN_CALLBACK).toTemplate();
     }
 
     @Override

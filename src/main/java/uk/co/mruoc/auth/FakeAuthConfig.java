@@ -28,7 +28,7 @@ public class FakeAuthConfig implements AuthConfig {
 
     @Override
     public String getRedirectUrl(UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().path("oauth2fakeLogin").toTemplate();
+        return uriInfo.getBaseUriBuilder().path(AuthEndpoints.LOGIN).toTemplate();
     }
 
     @Override

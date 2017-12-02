@@ -28,7 +28,7 @@ public class GitHubAuthConfig implements AuthConfig {
 
     @Override
     public String getRedirectUrl(UriInfo uriInfo) {
-        return uriInfo.getBaseUriBuilder().path("oauth2callback/github").toTemplate();
+        return uriInfo.getBaseUriBuilder().path(AuthEndpoints.GITHUB_LOGIN_CALLBACK).toTemplate();
     }
     @Override
     public String getTokenUrl() {
