@@ -50,7 +50,7 @@ dependencies {
     compile 'uk.co.deloittedigital.dropwizard:dropwizard-hikaricp:1.0.0'
     compile 'org.jdbi:jdbi:2.78'
     compile 'mysql:mysql-connector-java:6.0.6'
-    compile 'com.smoketurner:dropwizard-swagger:1.0.0-1'
+    compile 'com.smoketurner:dropwizard-swagger:1.1.1-1'
     compile 'com.github.michaelruocco:http-client:4.0.4'
 
     testCompile 'junit:junit:4.12'

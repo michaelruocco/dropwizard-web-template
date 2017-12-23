@@ -1,9 +1,7 @@
 package uk.co.mruoc.resources.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import uk.co.mruoc.CustomerErrorMessageBuilder;
 import uk.co.mruoc.Customer;
 import uk.co.mruoc.ErrorMessage;
@@ -18,7 +16,7 @@ import java.net.URI;
 import java.util.List;
 
 @Path("ws/v1/customers/")
-@Api(value = "ws/v1/customers/", description = "Customer Maintenance")
+@Api("Customer Maintenance")
 @Produces(MediaType.APPLICATION_JSON)
 public class CustomerResource {
 
@@ -31,8 +29,11 @@ public class CustomerResource {
 
     @GET
     @Path("{accountNumber}")
-    @ApiOperation(value = "Get customer")
+    @ApiOperation(value = "Get customer", response = Customer.class)
     @Timed
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Customer with id not found"),
+    })
     public Response getCustomer(@PathParam("accountNumber") String accountNumber) {
         if (!facade.exists(accountNumber))
             return buildNotFoundResponse(accountNumber);
@@ -42,7 +43,7 @@ public class CustomerResource {
     }
 
     @GET
-    @ApiOperation(value = "Get all customers")
+    @ApiOperation(value = "Get all customers", response = Customer.class, responseContainer = "list")
     @Timed
     public Response getCustomers() {
         List<Customer> customers = facade.read();
@@ -50,9 +51,13 @@ public class CustomerResource {
     }
 
     @POST
-    @ApiOperation(value = "Create customer")
+    @ApiOperation(value = "Create customer", code=201, response = Customer.class)
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = "Invalid customer payload supplied"),
+            @ApiResponse(code = 409, message = "Customer already exists with same id")
+    })
     public Response createCustomer(@ApiParam Customer customer, @Context UriInfo info) {
         if (facade.exists(customer.getAccountNumber()))
             return Response.status(409).entity(toError(errorMessageBuilder.buildAlreadyExists(customer))).build();
@@ -64,9 +69,12 @@ public class CustomerResource {
     }
 
     @PUT
-    @ApiOperation(value = "Update customer")
+    @ApiOperation(value = "Update customer", response = Customer.class)
     @Timed
     @Consumes(MediaType.APPLICATION_JSON)
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Customer with id not found")
+    })
     public Response updateCustomer(@ApiParam Customer customer) {
         String accountNumber = customer.getAccountNumber();
         if (!facade.exists(accountNumber))
@@ -79,7 +87,7 @@ public class CustomerResource {
 
     @DELETE
     @Path("{accountNumber}")
-    @ApiOperation(value = "Delete customer")
+    @ApiOperation(value = "Delete customer", code = 204)
     @Timed
     public Response deleteCustomer(@PathParam("accountNumber") String accountNumber) {
         facade.delete(accountNumber);
