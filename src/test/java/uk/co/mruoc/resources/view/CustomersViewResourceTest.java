@@ -1,13 +1,10 @@
 package uk.co.mruoc.resources.view;
 
-import io.dropwizard.views.View;
 import org.junit.Test;
 import uk.co.mruoc.*;
 import uk.co.mruoc.Customer;
-import uk.co.mruoc.auth.FakeUserInfo;
 import uk.co.mruoc.facade.FakeCustomerFacade;
 import uk.co.mruoc.view.CustomersView;
-import uk.co.mruoc.view.IndexView;
 
 import javax.ws.rs.core.UriInfo;
 

@@ -3,7 +3,6 @@ package uk.co.mruoc.resources.view;
 import io.dropwizard.jersey.sessions.Session;
 import io.dropwizard.views.View;
 import uk.co.mruoc.auth.AuthEndpoints;
-import uk.co.mruoc.auth.AuthFactory;
 import uk.co.mruoc.auth.SessionFakeId;
 import uk.co.mruoc.view.LoginView;
 
