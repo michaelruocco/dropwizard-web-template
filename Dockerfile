@@ -1,4 +1,4 @@
-FROM java:openjdk-8-jre-alpine
+FROM adoptopenjdk/openjdk13:alpine-jre
 
 ENV FAKE_CLIENT_ID ${FAKE_CLIENT_ID}
 

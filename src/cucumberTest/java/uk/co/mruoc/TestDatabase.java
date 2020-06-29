@@ -2,6 +2,8 @@ package uk.co.mruoc;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.configuration.Configuration;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -19,8 +21,9 @@ public class TestDatabase {
     }
 
     public void setUp() {
-        Flyway flyway = new Flyway();
-        flyway.setDataSource(getDataSource());
+        Configuration configuration = new FluentConfiguration()
+                .dataSource(getDataSource());
+        Flyway flyway = new Flyway(configuration);
         flyway.clean();
         flyway.migrate();
     }

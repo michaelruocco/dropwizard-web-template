@@ -9,18 +9,20 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.yaml:snakeyaml:1.19'
+        classpath 'org.yaml:snakeyaml:1.26'
         classpath 'com.wiredforcode:gradle-spawn-plugin:0.8.1'
     }
 }
 
 plugins {
-    id 'com.github.michaelruocco.embedded-mysql-plugin' version '2.1.5'
-    id 'org.flywaydb.flyway' version '5.0.2'
-    id 'com.github.samueltbrown.cucumber' version '0.9'
-    id 'com.github.kt3k.coveralls' version '2.8.2'
-    id 'com.github.ben-manes.versions' version '0.17.0'
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
+    id 'java-library'
+    id 'java-test-fixtures'
+    id 'com.github.michaelruocco.embedded-mysql-plugin' version '2.1.11'
+    id 'org.flywaydb.flyway' version '6.5.0'
+    id 'com.github.kt3k.coveralls' version '2.10.1'
+    id 'com.github.ben-manes.versions' version '0.28.0'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'org.unbroken-dome.test-sets' version '3.0.1'
 }
 
 apply plugin: 'java'
@@ -29,39 +31,49 @@ apply plugin: 'application'
 apply plugin: 'com.wiredforcode.spawn'
 apply plugin: 'jacoco'
 
+testSets {
+    cucumberTest
+}
+
+configurations {
+    cucumberTestRuntime {
+        extendsFrom testImplementation
+    }
+}
+
 project.ext {
     artifactId = "dropwizard-web-template"
     group = 'com.github.michaelruocco'
     version = '1.0.0'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'io.dropwizard:dropwizard-core:1.2.1'
-    compile 'io.dropwizard:dropwizard-jdbi:1.2.1'
-    compile 'io.dropwizard:dropwizard-testing:1.2.1'
-    compile 'io.dropwizard:dropwizard-views-freemarker:1.2.1'
+    compile 'io.dropwizard:dropwizard-core:2.0.10'
+    compile 'io.dropwizard:dropwizard-jdbi:2.0.0-rc9'
+    compile 'io.dropwizard:dropwizard-testing:2.0.10'
+    compile 'io.dropwizard:dropwizard-views-freemarker:2.0.10'
     compile 'uk.co.deloittedigital.dropwizard:dropwizard-hikaricp:1.0.0'
     compile 'org.jdbi:jdbi:2.78'
-    compile 'mysql:mysql-connector-java:6.0.6'
-    compile 'com.smoketurner:dropwizard-swagger:1.2.3-3'
+    compile 'mysql:mysql-connector-java:8.0.20'
+    compile 'com.smoketurner:dropwizard-swagger:2.0.0-1'
     compile 'com.github.michaelruocco:http-client:4.0.4'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.9.0'
-    testCompile 'info.cukes:cucumber-java:1.2.5'
-    testCompile 'info.cukes:cucumber-junit:1.2.5'
-    testCompile 'org.yaml:snakeyaml:1.19'
-    testCompile 'com.h2database:h2:1.4.196'
-    testCompile 'commons-dbcp:commons-dbcp:1.4'
-    testCompile 'org.mockito:mockito-all:1.10.19'
-    testCompile 'org.flywaydb:flyway-core:5.0.7'
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'org.assertj:assertj-core:3.16.1'
+    testImplementation 'org.yaml:snakeyaml:1.19'
+    testImplementation 'com.h2database:h2:1.4.200'
+    testImplementation 'org.mockito:mockito-all:2.0.2-beta'
+
+    testFixturesImplementation 'org.flywaydb:flyway-core:6.5.0'
+    testFixturesImplementation 'commons-dbcp:commons-dbcp:1.4'
+
+    cucumberTestCompile 'io.cucumber:cucumber-java:6.1.2'
+    cucumberTestCompile 'org.flywaydb:flyway-core:6.5.0'
+    cucumberTestCompile 'commons-dbcp:commons-dbcp:1.4'
 }
 
 def getConfigPath() {
@@ -80,7 +92,7 @@ def getDatabaseConfig() {
 embeddedMysql {
     def databaseConfig = getDatabaseConfig()
     url = databaseConfig.url
-    version = 'v5_6_22'
+    version = 'v8_0_17'
 }
 
 flyway {
@@ -117,6 +129,7 @@ run {
         environment 'GITHUB_CLIENT_SECRET', project.property('github.client.secret')
     }
     args 'server', configPath
+    finalizedBy stopEmbeddedMysql
 }
 
 mainClassName = 'uk.co.mruoc.Main'
@@ -138,19 +151,24 @@ task startServer(type: SpawnProcessTask) {
     setupMysql.mustRunAfter shadowJar
     command 'java -jar build/libs/' + project.ext.artifactId + '-all.jar server ' + configPath
     ready 'org.eclipse.jetty.server.Server: Started'
+    pidLockFileName '/build/.bootRun.pid.lock'
 }
 
-task stopServer(type: KillProcessTask)
+task stopServer(type: KillProcessTask) {
+    finalizedBy { stopEmbeddedMysql }
+    pidLockFileName '/build/.bootRun.pid.lock'
+}
 
-task acceptanceTest(type: JavaExec) {
-    dependsOn startServer
-    finalizedBy stopServer
-    main = "cucumber.api.cli.Main"
-    classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.cucumber.output
-    args = ['-p', 'pretty',
-            '-p', 'json:build/reports/cucumberResults.json',
-            '--glue', 'uk.co.mruoc',
-            'src/cucumber/resources']
+task cucumber() {
+    dependsOn assemble, cucumberTestClasses, startServer
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberTestRuntime + sourceSets.main.output + sourceSets.cucumberTest.output
+            args = ['--plugin', 'pretty', '--glue', 'uk.co.mruoc', 'src/cucumberTest/resources']
+        }
+    }
+    finalizedBy { stopServer }
 }
 
 jacocoTestReport {
@@ -158,8 +176,4 @@ jacocoTestReport {
         xml.enabled = true
         html.enabled = true
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.0'
 }

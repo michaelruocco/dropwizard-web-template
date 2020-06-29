@@ -30,12 +30,12 @@ public class Application extends io.dropwizard.Application<Config> {
     public void initialize(Bootstrap<Config> bootstrap) {
         bootstrap.addBundle(new HikariBundle());
         bootstrap.addBundle(new DBIExceptionsBundle());
-        bootstrap.addBundle(new SwaggerBundle<Config>() {
+        /*bootstrap.addBundle(new SwaggerBundle<Config>() {
             @Override
             protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(Config config) {
                 return config.swaggerBundleConfiguration;
             }
-        });
+        });*/
         bootstrap.addBundle(new ViewBundle<>());
     }
 
