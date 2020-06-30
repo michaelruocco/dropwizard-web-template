@@ -3,7 +3,7 @@ jdk: openjdk13
 
 script:
   - ./gradlew check --stacktrace
-  - ./gradlew acceptanceTest --stacktrace
+  - ./gradlew cucumber --stacktrace
 
 before_install:
   - sudo apt-get update -qq
